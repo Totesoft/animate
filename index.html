@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Wish Creator</title>
+    <title>Interactive Birthday Wish Creator</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -40,8 +40,8 @@
 
         .controls {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
             margin-bottom: 30px;
         }
 
@@ -54,7 +54,7 @@
         .control-group h3 {
             margin-bottom: 15px;
             color: #333;
-            font-size: 1.2em;
+            font-size: 1.1em;
         }
 
         .input-group {
@@ -66,14 +66,15 @@
             margin-bottom: 5px;
             font-weight: bold;
             color: #555;
+            font-size: 14px;
         }
 
-        input[type="text"], select {
+        input[type="text"], select, input[type="range"] {
             width: 100%;
             padding: 10px;
             border: 2px solid #ddd;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 14px;
             transition: border-color 0.3s;
         }
 
@@ -90,49 +91,70 @@
             cursor: pointer;
         }
 
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
         .color-controls {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
 
-        .preview-area {
-            background: #000;
-            border-radius: 15px;
-            padding: 40px;
-            text-align: center;
-            min-height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
+        .gradient-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
         }
 
-        .wish-text {
-            font-size: 3em;
-            font-weight: bold;
-            color: #ff6b6b;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            word-wrap: break-word;
+        .preview-container {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .canvas-container {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        #mainCanvas {
+            display: block;
             max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+        }
+
+        .climate-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            border-radius: 15px;
         }
 
         .button-group {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 20px;
         }
 
         button {
             background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: 12px 25px;
             border-radius: 25px;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
             cursor: pointer;
-            margin: 0 10px;
+            margin: 5px;
             transition: transform 0.3s, box-shadow 0.3s;
         }
 
@@ -145,6 +167,126 @@
             font-size: 12px;
             color: #666;
             margin-top: 5px;
+        }
+
+        .range-value {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-weight: bold;
+            color: #666;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .particle {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .snowflake {
+            color: white;
+            font-size: 20px;
+            animation: snowfall linear infinite;
+        }
+
+        .raindrop {
+            width: 2px;
+            height: 20px;
+            background: rgba(173, 216, 230, 0.7);
+            animation: rainfall linear infinite;
+        }
+
+        .heart {
+            color: #ff69b4;
+            font-size: 16px;
+            animation: heartfall linear infinite;
+        }
+
+        .star {
+            color: #ffd700;
+            font-size: 14px;
+            animation: starfall linear infinite;
+        }
+
+        @keyframes snowfall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes rainfall {
+            0% {
+                transform: translateY(-100vh);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        @keyframes heartfall {
+            0% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: translateY(100vh) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        @keyframes starfall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
         }
 
         @keyframes bounce {
@@ -185,13 +327,13 @@
 
         @keyframes glow {
             0% {
-                text-shadow: 0 0 5px currentColor;
+                filter: drop-shadow(0 0 5px currentColor);
             }
             50% {
-                text-shadow: 0 0 20px currentColor, 0 0 30px currentColor;
+                filter: drop-shadow(0 0 20px currentColor) drop-shadow(0 0 30px currentColor);
             }
             100% {
-                text-shadow: 0 0 5px currentColor;
+                filter: drop-shadow(0 0 5px currentColor);
             }
         }
 
@@ -214,44 +356,48 @@
             }
         }
 
-        .animation-bounce {
-            animation: bounce 2s infinite;
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
-        .animation-pulse {
-            animation: pulse 2s infinite;
-        }
-
-        .animation-shake {
-            animation: shake 0.8s infinite;
-        }
-
-        .animation-glow {
-            animation: glow 2s infinite;
-        }
-
-        .animation-rainbow {
-            animation: rainbow 3s infinite;
-        }
-
-        .animation-rotate {
-            animation: rotate 3s linear infinite;
+        @keyframes slideIn {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(0);
+            }
         }
 
         @media print {
             body {
                 background: white !important;
             }
-            .controls, .button-group {
+            .controls, .button-group, .tab-container {
                 display: none !important;
             }
             .container {
                 box-shadow: none !important;
                 padding: 0 !important;
             }
-            .preview-area {
-                background: white !important;
-                color: black !important;
+        }
+
+        @media (max-width: 1024px) {
+            .controls {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -259,39 +405,90 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎉 Birthday Wish Creator 🎂</h1>
-            <p>Create personalized animated birthday wishes!</p>
+            <h1>🎉 Interactive Birthday Wish Creator 🎂</h1>
+            <p>Create personalized animated birthday wishes with photos, effects, and climate animations!</p>
+        </div>
+
+        <div class="tab-container">
+            <button class="tab active" onclick="switchTab('text')">📝 Text & Animation</button>
+            <button class="tab" onclick="switchTab('media')">🖼️ Media & Effects</button>
+            <button class="tab" onclick="switchTab('climate')">🌦️ Climate Effects</button>
         </div>
 
         <div class="controls">
-            <div class="control-group">
-                <h3>✨ Text & Animation</h3>
-                <div class="input-group">
-                    <label for="wishText">Birthday Message (max 255 characters):</label>
-                    <input type="text" id="wishText" placeholder="Happy Birthday!" maxlength="255">
-                    <div class="char-counter">Characters: <span id="charCount">0</span>/255</div>
+            <div id="textTab" class="tab-content active">
+                <div class="control-group">
+                    <h3>✨ Text & Animation</h3>
+                    <div class="input-group">
+                        <label for="wishText">Birthday Message (max 255 characters):</label>
+                        <input type="text" id="wishText" placeholder="Happy Birthday!" maxlength="255">
+                        <div class="char-counter">Characters: <span id="charCount">0</span>/255</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="animation">Animation:</label>
+                        <select id="animation">
+                            <option value="none">No Animation</option>
+                            <option value="bounce">Bounce</option>
+                            <option value="pulse">Pulse</option>
+                            <option value="shake">Shake</option>
+                            <option value="glow">Glow</option>
+                            <option value="rainbow">Rainbow</option>
+                            <option value="rotate">Rotate</option>
+                            <option value="fadeIn">Fade In</option>
+                            <option value="slideIn">Slide In</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="fontSize">Font Size:</label>
+                        <input type="range" id="fontSize" min="20" max="120" value="60">
+                        <div class="range-value">Size: <span id="fontSizeValue">60</span>px</div>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label for="animation">Animation:</label>
-                    <select id="animation">
-                        <option value="none">No Animation</option>
-                        <option value="bounce">Bounce</option>
-                        <option value="pulse">Pulse</option>
-                        <option value="shake">Shake</option>
-                        <option value="glow">Glow</option>
-                        <option value="rainbow">Rainbow</option>
-                        <option value="rotate">Rotate</option>
-                    </select>
+            </div>
+
+            <div id="mediaTab" class="tab-content">
+                <div class="control-group">
+                    <h3>🖼️ Photo Upload</h3>
+                    <div class="input-group">
+                        <label for="photoUpload">Upload Background Photo:</label>
+                        <input type="file" id="photoUpload" accept="image/*">
+                    </div>
+                    <div class="input-group">
+                        <label for="photoOpacity">Photo Opacity:</label>
+                        <input type="range" id="photoOpacity" min="0" max="100" value="80">
+                        <div class="range-value">Opacity: <span id="photoOpacityValue">80</span>%</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="textPosition">Text Position:</label>
+                        <select id="textPosition">
+                            <option value="center">Center</option>
+                            <option value="top">Top</option>
+                            <option value="bottom">Bottom</option>
+                            <option value="left">Left</option>
+                            <option value="right">Right</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label for="fontSize">Font Size:</label>
-                    <select id="fontSize">
-                        <option value="1em">Small</option>
-                        <option value="2em">Medium</option>
-                        <option value="3em" selected>Large</option>
-                        <option value="4em">Extra Large</option>
-                        <option value="5em">Huge</option>
-                    </select>
+            </div>
+
+            <div id="climateTab" class="tab-content">
+                <div class="control-group">
+                    <h3>🌦️ Climate Effects</h3>
+                    <div class="input-group">
+                        <label for="climateEffect">Climate Effect:</label>
+                        <select id="climateEffect">
+                            <option value="none">No Effect</option>
+                            <option value="snow">Snow ❄️</option>
+                            <option value="rain">Rain 🌧️</option>
+                            <option value="hearts">Hearts 💕</option>
+                            <option value="stars">Stars ⭐</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="particleIntensity">Effect Intensity:</label>
+                        <input type="range" id="particleIntensity" min="1" max="10" value="5">
+                        <div class="range-value">Intensity: <span id="particleIntensityValue">5</span></div>
+                    </div>
                 </div>
             </div>
 
@@ -300,12 +497,17 @@
                 <div class="color-controls">
                     <div class="input-group">
                         <label for="textColor">Text Color:</label>
-                        <input type="color" id="textColor" value="#ff6b6b">
+                        <input type="color" id="textColor" value="#ffffff">
                     </div>
                     <div class="input-group">
-                        <label for="bgColor">Background Color:</label>
-                        <input type="color" id="bgColor" value="#000000">
+                        <label for="strokeColor">Text Stroke:</label>
+                        <input type="color" id="strokeColor" value="#000000">
                     </div>
+                </div>
+                <div class="input-group">
+                    <label for="strokeWidth">Stroke Width:</label>
+                    <input type="range" id="strokeWidth" min="0" max="10" value="2">
+                    <div class="range-value">Width: <span id="strokeWidthValue">2</span>px</div>
                 </div>
                 <div class="input-group">
                     <label for="fontFamily">Font Style:</label>
@@ -318,75 +520,312 @@
                         <option value="'Brush Script MT', cursive">Brush Script</option>
                     </select>
                 </div>
+            </div>
+
+            <div class="control-group">
+                <h3>🌈 Background Effects</h3>
                 <div class="input-group">
-                    <label for="textAlign">Text Alignment:</label>
-                    <select id="textAlign">
-                        <option value="center" selected>Center</option>
-                        <option value="left">Left</option>
-                        <option value="right">Right</option>
+                    <label for="backgroundType">Background Type:</label>
+                    <select id="backgroundType">
+                        <option value="solid">Solid Color</option>
+                        <option value="gradient">Gradient</option>
+                        <option value="photo">Photo Only</option>
+                    </select>
+                </div>
+                <div class="gradient-controls">
+                    <div class="input-group">
+                        <label for="gradientColor1">Gradient Color 1:</label>
+                        <input type="color" id="gradientColor1" value="#667eea">
+                    </div>
+                    <div class="input-group">
+                        <label for="gradientColor2">Gradient Color 2:</label>
+                        <input type="color" id="gradientColor2" value="#764ba2">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="gradientDirection">Gradient Direction:</label>
+                    <select id="gradientDirection">
+                        <option value="linear-gradient(135deg,">Diagonal</option>
+                        <option value="linear-gradient(90deg,">Horizontal</option>
+                        <option value="linear-gradient(0deg,">Vertical</option>
+                        <option value="radial-gradient(circle,">Radial</option>
                     </select>
                 </div>
             </div>
         </div>
 
-        <div class="preview-area" id="previewArea">
-            <div class="wish-text" id="wishDisplay">Happy Birthday! 🎉</div>
+        <div class="preview-container">
+            <div class="canvas-container">
+                <canvas id="mainCanvas" width="800" height="600"></canvas>
+                <div class="climate-overlay" id="climateOverlay"></div>
+            </div>
         </div>
 
         <div class="button-group">
             <button onclick="randomizeColors()">🎲 Random Colors</button>
+            <button onclick="randomizeAnimation()">🎪 Random Animation</button>
             <button onclick="printWish()">🖨️ Print Wish</button>
-            <button onclick="resetAll()">🔄 Reset</button>
+            <button onclick="resetAll()">🔄 Reset All</button>
+        </div>
+
+        <div class="download-buttons">
+            <button onclick="downloadImage('png')">📥 Download PNG</button>
+            <button onclick="downloadImage('jpeg')">📥 Download JPG</button>
         </div>
     </div>
 
     <script>
-        const wishText = document.getElementById('wishText');
-        const wishDisplay = document.getElementById('wishDisplay');
-        const previewArea = document.getElementById('previewArea');
-        const charCount = document.getElementById('charCount');
-        const animation = document.getElementById('animation');
-        const textColor = document.getElementById('textColor');
-        const bgColor = document.getElementById('bgColor');
-        const fontSize = document.getElementById('fontSize');
-        const fontFamily = document.getElementById('fontFamily');
-        const textAlign = document.getElementById('textAlign');
+        const canvas = document.getElementById('mainCanvas');
+        const ctx = canvas.getContext('2d');
+        let backgroundImage = null;
+        let animationId = null;
+        let particles = [];
 
-        function updateWish() {
-            const text = wishText.value || 'Happy Birthday! 🎉';
-            wishDisplay.textContent = text;
-            charCount.textContent = wishText.value.length;
-        }
+        const elements = {
+            wishText: document.getElementById('wishText'),
+            charCount: document.getElementById('charCount'),
+            animation: document.getElementById('animation'),
+            fontSize: document.getElementById('fontSize'),
+            fontSizeValue: document.getElementById('fontSizeValue'),
+            textColor: document.getElementById('textColor'),
+            strokeColor: document.getElementById('strokeColor'),
+            strokeWidth: document.getElementById('strokeWidth'),
+            strokeWidthValue: document.getElementById('strokeWidthValue'),
+            fontFamily: document.getElementById('fontFamily'),
+            photoUpload: document.getElementById('photoUpload'),
+            photoOpacity: document.getElementById('photoOpacity'),
+            photoOpacityValue: document.getElementById('photoOpacityValue'),
+            textPosition: document.getElementById('textPosition'),
+            backgroundType: document.getElementById('backgroundType'),
+            gradientColor1: document.getElementById('gradientColor1'),
+            gradientColor2: document.getElementById('gradientColor2'),
+            gradientDirection: document.getElementById('gradientDirection'),
+            climateEffect: document.getElementById('climateEffect'),
+            particleIntensity: document.getElementById('particleIntensity'),
+            particleIntensityValue: document.getElementById('particleIntensityValue'),
+            climateOverlay: document.getElementById('climateOverlay')
+        };
 
-        function updateAnimation() {
-            wishDisplay.className = 'wish-text';
-            if (animation.value !== 'none') {
-                wishDisplay.classList.add(`animation-${animation.value}`);
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
+
+            const tabMap = {
+                'text': 'textTab',
+                'media': 'mediaTab',
+                'climate': 'climateTab'
+            };
+
+            if (tabMap[tabName]) {
+                document.getElementById(tabMap[tabName]).classList.add('active');
             }
         }
 
-        function updateColors() {
-            if (animation.value === 'rainbow') {
-                wishDisplay.style.color = '';
+        function updateCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            drawBackground();
+            drawBackgroundImage();
+            drawText();
+        }
+
+        function drawBackground() {
+            const bgType = elements.backgroundType.value;
+
+            if (bgType === 'photo' && backgroundImage) {
+                return;
+            }
+
+            if (bgType === 'gradient') {
+                const direction = elements.gradientDirection.value;
+                const color1 = elements.gradientColor1.value;
+                const color2 = elements.gradientColor2.value;
+
+                let gradient;
+                if (direction.includes('radial')) {
+                    gradient = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 0, canvas.width/2, canvas.height/2, Math.max(canvas.width, canvas.height)/2);
+                } else if (direction.includes('90deg')) {
+                    gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+                } else if (direction.includes('0deg')) {
+                    gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                } else {
+                    gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+                }
+
+                gradient.addColorStop(0, color1);
+                gradient.addColorStop(1, color2);
+                ctx.fillStyle = gradient;
             } else {
-                wishDisplay.style.color = textColor.value;
+                ctx.fillStyle = elements.gradientColor1.value;
             }
-            previewArea.style.backgroundColor = bgColor.value;
+
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
 
-        function updateStyles() {
-            wishDisplay.style.fontSize = fontSize.value;
-            wishDisplay.style.fontFamily = fontFamily.value;
-            previewArea.style.textAlign = textAlign.value;
+        function drawBackgroundImage() {
+            if (backgroundImage) {
+                const opacity = elements.photoOpacity.value / 100;
+                ctx.globalAlpha = opacity;
+
+                const aspectRatio = backgroundImage.width / backgroundImage.height;
+                const canvasRatio = canvas.width / canvas.height;
+
+                let drawWidth, drawHeight, offsetX, offsetY;
+
+                if (aspectRatio > canvasRatio) {
+                    drawHeight = canvas.height;
+                    drawWidth = drawHeight * aspectRatio;
+                    offsetX = (canvas.width - drawWidth) / 2;
+                    offsetY = 0;
+                } else {
+                    drawWidth = canvas.width;
+                    drawHeight = drawWidth / aspectRatio;
+                    offsetX = 0;
+                    offsetY = (canvas.height - drawHeight) / 2;
+                }
+
+                ctx.drawImage(backgroundImage, offsetX, offsetY, drawWidth, drawHeight);
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        function drawText() {
+            const text = elements.wishText.value || 'Happy Birthday! 🎉';
+            const fontSize = elements.fontSize.value;
+            const fontFamily = elements.fontFamily.value;
+            const textColor = elements.textColor.value;
+            const strokeColor = elements.strokeColor.value;
+            const strokeWidth = elements.strokeWidth.value;
+            const position = elements.textPosition.value;
+
+            ctx.font = `bold ${fontSize}px ${fontFamily}`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            let x = canvas.width / 2;
+            let y = canvas.height / 2;
+
+            switch (position) {
+                case 'top':
+                    y = fontSize;
+                    break;
+                case 'bottom':
+                    y = canvas.height - fontSize / 2;
+                    break;
+                case 'left':
+                    x = fontSize;
+                    ctx.textAlign = 'left';
+                    break;
+                case 'right':
+                    x = canvas.width - fontSize;
+                    ctx.textAlign = 'right';
+                    break;
+            }
+
+            if (strokeWidth > 0) {
+                ctx.strokeStyle = strokeColor;
+                ctx.lineWidth = strokeWidth;
+                ctx.strokeText(text, x, y);
+            }
+
+            ctx.fillStyle = textColor;
+            ctx.fillText(text, x, y);
+        }
+
+        function createParticle(type) {
+            const particle = {
+                x: Math.random() * canvas.width,
+                y: -20,
+                speed: Math.random() * 3 + 1,
+                size: Math.random() * 10 + 5,
+                type: type
+            };
+
+            return particle;
+        }
+
+        function updateParticles() {
+            const climateType = elements.climateEffect.value;
+            const intensity = elements.particleIntensity.value;
+
+            if (climateType === 'none') {
+                elements.climateOverlay.innerHTML = '';
+                return;
+            }
+
+            if (Math.random() < intensity / 20) {
+                const particle = document.createElement('div');
+                particle.className = `particle ${climateType === 'snow' ? 'snowflake' :
+                                                climateType === 'rain' ? 'raindrop' :
+                                                climateType === 'hearts' ? 'heart' : 'star'}`;
+
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+
+                if (climateType === 'snow') {
+                    particle.textContent = '❄';
+                } else if (climateType === 'hearts') {
+                    particle.textContent = '💖';
+                } else if (climateType === 'stars') {
+                    particle.textContent = '⭐';
+                }
+
+                elements.climateOverlay.appendChild(particle);
+
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, 5000);
+            }
+        }
+
+        function animate() {
+            updateCanvas();
+            updateParticles();
+            animationId = requestAnimationFrame(animate);
+        }
+
+        function downloadImage(format) {
+            const link = document.createElement('a');
+            const filename = `birthday-wish.${format}`;
+
+            if (format === 'jpeg') {
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCanvas.width = canvas.width;
+                tempCanvas.height = canvas.height;
+
+                tempCtx.fillStyle = 'white';
+                tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+                tempCtx.drawImage(canvas, 0, 0);
+
+                link.href = tempCanvas.toDataURL('image/jpeg', 0.9);
+            } else {
+                link.href = canvas.toDataURL('image/png');
+            }
+
+            link.download = filename;
+            link.click();
         }
 
         function randomizeColors() {
-            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7', '#fd79a8', '#00b894', '#fdcb6e'];
-            const bgColors = ['#000000', '#2c3e50', '#34495e', '#8e44ad', '#e74c3c', '#d35400', '#27ae60', '#2980b9', '#f39c12'];
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7', '#fd79a8', '#00b894', '#fdcb6e', '#ff7675', '#74b9ff', '#a29bfe', '#fd79a8', '#e17055'];
 
-            textColor.value = colors[Math.floor(Math.random() * colors.length)];
-            bgColor.value = bgColors[Math.floor(Math.random() * bgColors.length)];
-            updateColors();
+            elements.textColor.value = colors[Math.floor(Math.random() * colors.length)];
+            elements.gradientColor1.value = colors[Math.floor(Math.random() * colors.length)];
+            elements.gradientColor2.value = colors[Math.floor(Math.random() * colors.length)];
+            elements.strokeColor.value = colors[Math.floor(Math.random() * colors.length)];
+
+            updateCanvas();
+        }
+
+        function randomizeAnimation() {
+            const animations = ['bounce', 'pulse', 'shake', 'glow', 'rainbow', 'rotate', 'fadeIn', 'slideIn'];
+            elements.animation.value = animations[Math.floor(Math.random() * animations.length)];
         }
 
         function printWish() {
@@ -394,31 +833,79 @@
         }
 
         function resetAll() {
-            wishText.value = '';
-            animation.value = 'none';
-            textColor.value = '#ff6b6b';
-            bgColor.value = '#000000';
-            fontSize.value = '3em';
-            fontFamily.value = 'Arial, sans-serif';
-            textAlign.value = 'center';
+            elements.wishText.value = '';
+            elements.animation.value = 'none';
+            elements.fontSize.value = 60;
+            elements.textColor.value = '#ffffff';
+            elements.strokeColor.value = '#000000';
+            elements.strokeWidth.value = 2;
+            elements.fontFamily.value = 'Arial, sans-serif';
+            elements.textPosition.value = 'center';
+            elements.backgroundType.value = 'gradient';
+            elements.gradientColor1.value = '#667eea';
+            elements.gradientColor2.value = '#764ba2';
+            elements.gradientDirection.value = 'linear-gradient(135deg,';
+            elements.climateEffect.value = 'none';
+            elements.particleIntensity.value = 5;
+            elements.photoOpacity.value = 80;
 
-            updateWish();
-            updateAnimation();
-            updateColors();
-            updateStyles();
+            backgroundImage = null;
+            elements.climateOverlay.innerHTML = '';
+
+            updateRangeValues();
+            updateCharCount();
+            updateCanvas();
         }
 
-        wishText.addEventListener('input', updateWish);
-        animation.addEventListener('change', updateAnimation);
-        textColor.addEventListener('change', updateColors);
-        bgColor.addEventListener('change', updateColors);
-        fontSize.addEventListener('change', updateStyles);
-        fontFamily.addEventListener('change', updateStyles);
-        textAlign.addEventListener('change', updateStyles);
+        function updateRangeValues() {
+            elements.fontSizeValue.textContent = elements.fontSize.value;
+            elements.strokeWidthValue.textContent = elements.strokeWidth.value;
+            elements.photoOpacityValue.textContent = elements.photoOpacity.value;
+            elements.particleIntensityValue.textContent = elements.particleIntensity.value;
+        }
 
-        updateWish();
-        updateColors();
-        updateStyles();
+        function updateCharCount() {
+            elements.charCount.textContent = elements.wishText.value.length;
+        }
+
+        elements.wishText.addEventListener('input', () => {
+            updateCharCount();
+            updateCanvas();
+        });
+
+        elements.photoUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        backgroundImage = img;
+                        updateCanvas();
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        [elements.fontSize, elements.strokeWidth, elements.photoOpacity, elements.particleIntensity].forEach(slider => {
+            slider.addEventListener('input', () => {
+                updateRangeValues();
+                updateCanvas();
+            });
+        });
+
+        [elements.animation, elements.textColor, elements.strokeColor, elements.fontFamily,
+         elements.textPosition, elements.backgroundType, elements.gradientColor1,
+         elements.gradientColor2, elements.gradientDirection, elements.climateEffect].forEach(control => {
+            control.addEventListener('change', updateCanvas);
+        });
+
+        updateRangeValues();
+        updateCharCount();
+        updateCanvas();
+        animate();
     </script>
 </body>
 </html>
