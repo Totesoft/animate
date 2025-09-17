@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Birthday Wish Creator</title>
+    <title>E-Greeting Card Creator - Birthday Wishes</title>
     <style>
         * {
             margin: 0;
@@ -149,6 +149,214 @@
             font-weight: bold;
             font-size: 18px;
             margin-top: 5px;
+        }
+
+        .greeting-info-section {
+            background: linear-gradient(135deg, #e17055, #f39c12);
+            padding: 25px;
+            border-radius: 20px;
+            color: white;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 35px rgba(225, 112, 85, 0.3);
+        }
+
+        .greeting-info-section h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.4em;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .info-input {
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            transition: all 0.3s;
+        }
+
+        .info-input:focus {
+            outline: none;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .greeting-templates {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .template-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 12px;
+        }
+
+        .template-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .template-card.active {
+            border-color: white;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .template-emoji {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .card-preview {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card-header h1 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .card-header p {
+            opacity: 0.9;
+        }
+
+        .card-footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+
+        .signature {
+            font-style: italic;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .sharing-section {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .share-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .share-link {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 12px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            word-break: break-all;
+            cursor: pointer;
+        }
+
+        .share-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .mode-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #333;
+            border: 2px solid #ddd;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .mode-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .mode-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: transparent;
+        }
+
+        .simple-mode .greeting-info-section,
+        .simple-mode .greeting-templates,
+        .simple-mode .card-preview {
+            display: none !important;
+        }
+
+        .advanced-mode .right-panel .card-preview {
+            display: block !important;
         }
 
         .input-group {
@@ -567,8 +775,17 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎉 Interactive Birthday Wish Creator 🎂</h1>
-            <p>Create personalized animated birthday wishes with photos, effects, and climate animations!</p>
+            <h1>💌 Birthday Wish Creator 🎂</h1>
+            <p>Create beautiful birthday wishes - choose Simple Design or Advanced E-Greeting Card!</p>
+
+            <div class="mode-selector" style="margin-top: 20px; text-align: center;">
+                <button class="mode-btn active" id="simpleMode" onclick="switchMode('simple')">
+                    🎨 Simple Wish Design
+                </button>
+                <button class="mode-btn" id="advancedMode" onclick="switchMode('advanced')">
+                    💌 Advanced E-Greeting
+                </button>
+            </div>
         </div>
 
         <div class="warning-message" id="warningMessage">
@@ -579,9 +796,49 @@
 
         <div class="main-layout">
             <div class="left-panel">
+                <div class="greeting-info-section">
+                    <h2>📝 Greeting Card Details</h2>
+                    <div class="info-grid">
+                        <input type="text" id="recipientName" class="info-input" placeholder="Recipient's Name" maxlength="50">
+                        <input type="text" id="senderName" class="info-input" placeholder="Your Name" maxlength="50">
+                        <input type="text" id="occasion" class="info-input" placeholder="Occasion (e.g., 25th Birthday)" maxlength="50">
+                        <input type="date" id="eventDate" class="info-input">
+                    </div>
+                </div>
+
+                <div class="greeting-templates">
+                    <h3 style="margin-bottom: 10px; text-align: center;">🎨 Choose Template</h3>
+                    <div class="template-grid" id="templateGrid">
+                        <div class="template-card active" data-template="classic">
+                            <span class="template-emoji">🎂</span>
+                            Classic
+                        </div>
+                        <div class="template-card" data-template="party">
+                            <span class="template-emoji">🎉</span>
+                            Party
+                        </div>
+                        <div class="template-card" data-template="elegant">
+                            <span class="template-emoji">✨</span>
+                            Elegant
+                        </div>
+                        <div class="template-card" data-template="fun">
+                            <span class="template-emoji">🎈</span>
+                            Fun
+                        </div>
+                        <div class="template-card" data-template="love">
+                            <span class="template-emoji">💖</span>
+                            Love
+                        </div>
+                        <div class="template-card" data-template="cute">
+                            <span class="template-emoji">🥳</span>
+                            Cute
+                        </div>
+                    </div>
+                </div>
+
                 <div class="text-input-section">
-                    <h2>✨ Type Your Birthday Message</h2>
-                    <textarea class="main-text-input" id="wishText" placeholder="Type your amazing birthday message here... 🎉&#10;&#10;Make someone's day special with your words!" maxlength="255"></textarea>
+                    <h2>✨ Your Personal Message</h2>
+                    <textarea class="main-text-input" id="wishText" placeholder="Write your heartfelt birthday message here... 🎉&#10;&#10;Make this birthday extra special with your words!" maxlength="255"></textarea>
                     <div class="char-counter" style="text-align: center; margin-top: 15px; color: rgba(255,255,255,0.8);">
                         Characters: <span id="charCount">0</span>/255
                     </div>
@@ -738,10 +995,46 @@
                     Time Remaining: <span class="timer" id="sessionTimer">12:00:00</span>
                 </div>
 
-                <div class="canvas-section">
+                <div class="card-preview" id="cardPreview" style="display: none;">
+                    <div class="card-header" id="cardHeader">
+                        <h1 id="cardTitle">🎉 Happy Birthday! 🎂</h1>
+                        <p id="cardSubtitle">Hope your special day is wonderful!</p>
+                    </div>
+                    <div class="canvas-section">
+                        <div class="canvas-container">
+                            <canvas id="mainCanvas" width="800" height="600"></canvas>
+                            <div class="climate-overlay" id="climateOverlay"></div>
+                        </div>
+                    </div>
+                    <div class="card-footer" id="cardFooter">
+                        <div style="color: #333; font-weight: bold;" id="footerMessage">
+                            Wishing you joy and happiness on your special day! 🎈
+                        </div>
+                        <div class="signature" id="cardSignature">
+                            With love, <span id="senderDisplay">Someone Special</span> ❤️
+                        </div>
+                    </div>
+                </div>
+
+                <div class="canvas-section" id="simpleCanvas">
                     <div class="canvas-container">
-                        <canvas id="mainCanvas" width="800" height="600"></canvas>
-                        <div class="climate-overlay" id="climateOverlay"></div>
+                        <canvas id="simpleMainCanvas" width="800" height="600"></canvas>
+                        <div class="climate-overlay" id="simpleClimateOverlay"></div>
+                    </div>
+                </div>
+
+                <div class="sharing-section" id="sharingSection" style="display: none;">
+                    <h3>📤 Share Your E-Greeting</h3>
+                    <p>Share this beautiful card with your loved one!</p>
+                    <div class="share-link" id="shareableLink" onclick="copyToClipboard()">
+                        Click to generate shareable link
+                    </div>
+                    <div class="share-buttons">
+                        <button class="share-btn" onclick="shareViaEmail()">📧 Email</button>
+                        <button class="share-btn" onclick="shareViaWhatsApp()">📱 WhatsApp</button>
+                        <button class="share-btn" onclick="shareViaFacebook()">📘 Facebook</button>
+                        <button class="share-btn" onclick="shareViaTwitter()">🐦 Twitter</button>
+                        <button class="share-btn" onclick="downloadFullCard()">💾 Download Card</button>
                     </div>
                 </div>
             </div>
@@ -761,11 +1054,62 @@
     </div>
 
     <script>
+        let currentMode = 'simple';
+        let currentTemplate = 'classic';
+
         const canvas = document.getElementById('mainCanvas');
         const ctx = canvas.getContext('2d');
+        const simpleCanvas = document.getElementById('simpleMainCanvas');
+        const simpleCtx = simpleCanvas.getContext('2d');
+
         let backgroundImage = null;
         let animationId = null;
         let particles = [];
+
+        const greetingTemplates = {
+            classic: {
+                title: '🎉 Happy Birthday! 🎂',
+                subtitle: 'Hope your special day is wonderful!',
+                footer: 'Wishing you joy and happiness on your special day! 🎈',
+                colors: { primary: '#667eea', secondary: '#764ba2' },
+                defaultAnimation: 'bounce'
+            },
+            party: {
+                title: '🎊 Let\'s Party! 🥳',
+                subtitle: 'It\'s time to celebrate YOU!',
+                footer: 'Hope your birthday is as awesome as you are! 🎉',
+                colors: { primary: '#ff6b6b', secondary: '#ffa726' },
+                defaultAnimation: 'shake'
+            },
+            elegant: {
+                title: '✨ Happy Birthday ✨',
+                subtitle: 'May this year bring you endless joy',
+                footer: 'With warmest wishes on your special day 🌟',
+                colors: { primary: '#a29bfe', secondary: '#6c5ce7' },
+                defaultAnimation: 'glow'
+            },
+            fun: {
+                title: '🎈 Birthday Fun! 🎈',
+                subtitle: 'Another year of amazing adventures!',
+                footer: 'Keep being awesome and have a blast! 🚀',
+                colors: { primary: '#00cec9', secondary: '#00b894' },
+                defaultAnimation: 'pulse'
+            },
+            love: {
+                title: '💖 Happy Birthday Darling! 💖',
+                subtitle: 'You mean the world to me',
+                footer: 'Sending you all my love on your birthday! 💕',
+                colors: { primary: '#fd79a8', secondary: '#e84393' },
+                defaultAnimation: 'rainbow'
+            },
+            cute: {
+                title: '🥳 Cutie\'s Birthday! 🧁',
+                subtitle: 'You\'re simply adorable!',
+                footer: 'Hope your day is as sweet as cake! 🍰',
+                colors: { primary: '#fdcb6e', secondary: '#e17055' },
+                defaultAnimation: 'rotate'
+            }
+        };
 
         let userSession = {
             id: '',
@@ -799,8 +1143,81 @@
             climateOverlay: document.getElementById('climateOverlay'),
             warningMessage: document.getElementById('warningMessage'),
             sessionId: document.getElementById('sessionId'),
-            sessionTimer: document.getElementById('sessionTimer')
+            sessionTimer: document.getElementById('sessionTimer'),
+            recipientName: document.getElementById('recipientName'),
+            senderName: document.getElementById('senderName'),
+            occasion: document.getElementById('occasion'),
+            eventDate: document.getElementById('eventDate'),
+            cardPreview: document.getElementById('cardPreview'),
+            cardTitle: document.getElementById('cardTitle'),
+            cardSubtitle: document.getElementById('cardSubtitle'),
+            footerMessage: document.getElementById('footerMessage'),
+            senderDisplay: document.getElementById('senderDisplay'),
+            simpleCanvas: document.getElementById('simpleCanvas'),
+            sharingSection: document.getElementById('sharingSection'),
+            shareableLink: document.getElementById('shareableLink'),
+            templateGrid: document.getElementById('templateGrid')
         };
+
+        function switchMode(mode) {
+            currentMode = mode;
+            document.body.className = mode + '-mode';
+
+            document.getElementById('simpleMode').classList.toggle('active', mode === 'simple');
+            document.getElementById('advancedMode').classList.toggle('active', mode === 'advanced');
+
+            if (mode === 'simple') {
+                elements.simpleCanvas.style.display = 'block';
+                elements.cardPreview.style.display = 'none';
+                elements.sharingSection.style.display = 'none';
+            } else {
+                elements.simpleCanvas.style.display = 'none';
+                elements.cardPreview.style.display = 'block';
+                elements.sharingSection.style.display = 'block';
+                updateCardPreview();
+            }
+
+            saveSession();
+        }
+
+        function selectTemplate(templateName) {
+            currentTemplate = templateName;
+
+            document.querySelectorAll('.template-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.querySelector(`[data-template="${templateName}"]`).classList.add('active');
+
+            const template = greetingTemplates[templateName];
+            elements.gradientColor1.value = template.colors.primary;
+            elements.gradientColor2.value = template.colors.secondary;
+            elements.animation.value = template.defaultAnimation;
+
+            updateCardPreview();
+            updateCanvas();
+            saveSession();
+        }
+
+        function updateCardPreview() {
+            if (currentMode !== 'advanced') return;
+
+            const template = greetingTemplates[currentTemplate];
+            const recipientName = elements.recipientName.value || 'Someone Special';
+            const senderName = elements.senderName.value || 'Your Friend';
+            const occasion = elements.occasion.value;
+
+            elements.cardTitle.textContent = occasion ?
+                `🎉 Happy ${occasion}! 🎂` : template.title;
+
+            elements.cardSubtitle.textContent =
+                `Dear ${recipientName}, ${template.subtitle.toLowerCase()}`;
+
+            elements.footerMessage.textContent = template.footer;
+            elements.senderDisplay.textContent = senderName;
+
+            const headerGradient = `linear-gradient(135deg, ${template.colors.primary}, ${template.colors.secondary})`;
+            elements.cardPreview.querySelector('.card-header').style.background = headerGradient;
+        }
 
         function generateSessionId() {
             return 'BWC-' + Math.random().toString(36).substring(2, 8).toUpperCase() +
@@ -994,14 +1411,24 @@
         }
 
         function updateCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const activeCanvas = currentMode === 'simple' ? simpleCanvas : canvas;
+            const activeCtx = currentMode === 'simple' ? simpleCtx : ctx;
 
-            drawBackground();
-            drawBackgroundImage();
-            drawText();
+            activeCtx.clearRect(0, 0, activeCanvas.width, activeCanvas.height);
+
+            drawBackground(activeCtx, activeCanvas);
+            drawBackgroundImage(activeCtx, activeCanvas);
+            drawText(activeCtx, activeCanvas);
+
+            if (currentMode === 'simple') {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawBackground(ctx, canvas);
+                drawBackgroundImage(ctx, canvas);
+                drawText(ctx, canvas);
+            }
         }
 
-        function drawBackground() {
+        function drawBackground(context, canvasEl) {
             const bgType = elements.backgroundType.value;
 
             if (bgType === 'photo' && backgroundImage) {
@@ -1015,53 +1442,53 @@
 
                 let gradient;
                 if (direction.includes('radial')) {
-                    gradient = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 0, canvas.width/2, canvas.height/2, Math.max(canvas.width, canvas.height)/2);
+                    gradient = context.createRadialGradient(canvasEl.width/2, canvasEl.height/2, 0, canvasEl.width/2, canvasEl.height/2, Math.max(canvasEl.width, canvasEl.height)/2);
                 } else if (direction.includes('90deg')) {
-                    gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+                    gradient = context.createLinearGradient(0, 0, canvasEl.width, 0);
                 } else if (direction.includes('0deg')) {
-                    gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                    gradient = context.createLinearGradient(0, 0, 0, canvasEl.height);
                 } else {
-                    gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+                    gradient = context.createLinearGradient(0, 0, canvasEl.width, canvasEl.height);
                 }
 
                 gradient.addColorStop(0, color1);
                 gradient.addColorStop(1, color2);
-                ctx.fillStyle = gradient;
+                context.fillStyle = gradient;
             } else {
-                ctx.fillStyle = elements.gradientColor1.value;
+                context.fillStyle = elements.gradientColor1.value;
             }
 
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            context.fillRect(0, 0, canvasEl.width, canvasEl.height);
         }
 
-        function drawBackgroundImage() {
+        function drawBackgroundImage(context, canvasEl) {
             if (backgroundImage) {
                 const opacity = elements.photoOpacity.value / 100;
-                ctx.globalAlpha = opacity;
+                context.globalAlpha = opacity;
 
                 const aspectRatio = backgroundImage.width / backgroundImage.height;
-                const canvasRatio = canvas.width / canvas.height;
+                const canvasRatio = canvasEl.width / canvasEl.height;
 
                 let drawWidth, drawHeight, offsetX, offsetY;
 
                 if (aspectRatio > canvasRatio) {
-                    drawHeight = canvas.height;
+                    drawHeight = canvasEl.height;
                     drawWidth = drawHeight * aspectRatio;
-                    offsetX = (canvas.width - drawWidth) / 2;
+                    offsetX = (canvasEl.width - drawWidth) / 2;
                     offsetY = 0;
                 } else {
-                    drawWidth = canvas.width;
+                    drawWidth = canvasEl.width;
                     drawHeight = drawWidth / aspectRatio;
                     offsetX = 0;
-                    offsetY = (canvas.height - drawHeight) / 2;
+                    offsetY = (canvasEl.height - drawHeight) / 2;
                 }
 
-                ctx.drawImage(backgroundImage, offsetX, offsetY, drawWidth, drawHeight);
-                ctx.globalAlpha = 1;
+                context.drawImage(backgroundImage, offsetX, offsetY, drawWidth, drawHeight);
+                context.globalAlpha = 1;
             }
         }
 
-        function drawText() {
+        function drawText(context, canvasEl) {
             const text = elements.wishText.value || 'Happy Birthday! 🎉';
             const fontSize = elements.fontSize.value;
             const fontFamily = elements.fontFamily.value;
@@ -1070,38 +1497,38 @@
             const strokeWidth = elements.strokeWidth.value;
             const position = elements.textPosition.value;
 
-            ctx.font = `bold ${fontSize}px ${fontFamily}`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
+            context.font = `bold ${fontSize}px ${fontFamily}`;
+            context.textAlign = 'center';
+            context.textBaseline = 'middle';
 
-            let x = canvas.width / 2;
-            let y = canvas.height / 2;
+            let x = canvasEl.width / 2;
+            let y = canvasEl.height / 2;
 
             switch (position) {
                 case 'top':
                     y = fontSize;
                     break;
                 case 'bottom':
-                    y = canvas.height - fontSize / 2;
+                    y = canvasEl.height - fontSize / 2;
                     break;
                 case 'left':
                     x = fontSize;
-                    ctx.textAlign = 'left';
+                    context.textAlign = 'left';
                     break;
                 case 'right':
-                    x = canvas.width - fontSize;
-                    ctx.textAlign = 'right';
+                    x = canvasEl.width - fontSize;
+                    context.textAlign = 'right';
                     break;
             }
 
             if (strokeWidth > 0) {
-                ctx.strokeStyle = strokeColor;
-                ctx.lineWidth = strokeWidth;
-                ctx.strokeText(text, x, y);
+                context.strokeStyle = strokeColor;
+                context.lineWidth = strokeWidth;
+                context.strokeText(text, x, y);
             }
 
-            ctx.fillStyle = textColor;
-            ctx.fillText(text, x, y);
+            context.fillStyle = textColor;
+            context.fillText(text, x, y);
         }
 
         function createParticle(type) {
@@ -1160,26 +1587,92 @@
         }
 
         function downloadImage(format) {
+            const activeCanvas = currentMode === 'simple' ? simpleCanvas : canvas;
             const link = document.createElement('a');
             const filename = `birthday-wish.${format}`;
 
             if (format === 'jpeg') {
                 const tempCanvas = document.createElement('canvas');
                 const tempCtx = tempCanvas.getContext('2d');
-                tempCanvas.width = canvas.width;
-                tempCanvas.height = canvas.height;
+                tempCanvas.width = activeCanvas.width;
+                tempCanvas.height = activeCanvas.height;
 
                 tempCtx.fillStyle = 'white';
                 tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-                tempCtx.drawImage(canvas, 0, 0);
+                tempCtx.drawImage(activeCanvas, 0, 0);
 
                 link.href = tempCanvas.toDataURL('image/jpeg', 0.9);
             } else {
-                link.href = canvas.toDataURL('image/png');
+                link.href = activeCanvas.toDataURL('image/png');
             }
 
             link.download = filename;
             link.click();
+        }
+
+        function generateShareableLink() {
+            const cardData = {
+                recipientName: elements.recipientName.value,
+                senderName: elements.senderName.value,
+                occasion: elements.occasion.value,
+                message: elements.wishText.value,
+                template: currentTemplate,
+                mode: currentMode
+            };
+
+            const encodedData = btoa(JSON.stringify(cardData));
+            const baseUrl = window.location.origin + window.location.pathname;
+            return `${baseUrl}?card=${encodedData}`;
+        }
+
+        function copyToClipboard() {
+            const shareUrl = generateShareableLink();
+            elements.shareableLink.textContent = shareUrl;
+
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                elements.shareableLink.textContent = '✅ Link copied to clipboard!';
+                setTimeout(() => {
+                    elements.shareableLink.textContent = shareUrl;
+                }, 2000);
+            });
+        }
+
+        function shareViaEmail() {
+            const shareUrl = generateShareableLink();
+            const recipientName = elements.recipientName.value || 'Someone Special';
+            const subject = `🎉 Happy Birthday ${recipientName}! 🎂`;
+            const body = `I created a special birthday card for you! Click here to view it: ${shareUrl}`;
+
+            window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+        }
+
+        function shareViaWhatsApp() {
+            const shareUrl = generateShareableLink();
+            const recipientName = elements.recipientName.value || 'Someone Special';
+            const message = `🎉 Happy Birthday ${recipientName}! 🎂\nI made you a special birthday card: ${shareUrl}`;
+
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`);
+        }
+
+        function shareViaFacebook() {
+            const shareUrl = generateShareableLink();
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`);
+        }
+
+        function shareViaTwitter() {
+            const shareUrl = generateShareableLink();
+            const recipientName = elements.recipientName.value || 'Someone Special';
+            const message = `🎉 Happy Birthday ${recipientName}! 🎂 I created a special birthday card! ${shareUrl}`;
+
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`);
+        }
+
+        function downloadFullCard() {
+            if (currentMode === 'advanced') {
+                downloadImage('png');
+            } else {
+                downloadImage('png');
+            }
         }
 
         function randomizeColors() {
@@ -1277,6 +1770,21 @@
                 updateCanvas();
                 saveSession();
             });
+        });
+
+        [elements.recipientName, elements.senderName, elements.occasion, elements.eventDate].forEach(input => {
+            input.addEventListener('input', () => {
+                updateCardPreview();
+                saveSession();
+            });
+        });
+
+        elements.templateGrid.addEventListener('click', (e) => {
+            const templateCard = e.target.closest('.template-card');
+            if (templateCard) {
+                const template = templateCard.dataset.template;
+                selectTemplate(template);
+            }
         });
 
         initializeSession();
