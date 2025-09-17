@@ -183,6 +183,55 @@
             margin-top: 15px;
         }
 
+        .warning-message {
+            background: linear-gradient(135deg, #ff6b6b, #ffa726);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+            animation: gentleShake 0.5s ease-in-out;
+            display: none;
+        }
+
+        .warning-message.show {
+            display: block;
+        }
+
+        .warning-message h3 {
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .warning-message p {
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .close-warning {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .close-warning:hover {
+            background: white;
+            color: #ff6b6b;
+        }
+
+        @keyframes gentleShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
         .tab-container {
             display: flex;
             margin-bottom: 20px;
@@ -409,6 +458,12 @@
             <p>Create personalized animated birthday wishes with photos, effects, and climate animations!</p>
         </div>
 
+        <div class="warning-message" id="warningMessage">
+            <h3>🌟 Let's Keep It Positive! 🌟</h3>
+            <p>This app is designed to create beautiful, heartwarming birthday wishes that spread joy and happiness. Please use kind, positive words that would make someone smile on their special day.</p>
+            <button class="close-warning" onclick="closeWarning()">I Understand</button>
+        </div>
+
         <div class="tab-container">
             <button class="tab active" onclick="switchTab('text')">📝 Text & Animation</button>
             <button class="tab" onclick="switchTab('media')">🖼️ Media & Effects</button>
@@ -603,8 +658,52 @@
             climateEffect: document.getElementById('climateEffect'),
             particleIntensity: document.getElementById('particleIntensity'),
             particleIntensityValue: document.getElementById('particleIntensityValue'),
-            climateOverlay: document.getElementById('climateOverlay')
+            climateOverlay: document.getElementById('climateOverlay'),
+            warningMessage: document.getElementById('warningMessage')
         };
+
+        const profanityList = [
+            'damn', 'hell', 'crap', 'stupid', 'idiot', 'moron', 'dumb', 'hate', 'suck', 'loser',
+            'shut up', 'die', 'kill', 'death', 'murder', 'bloody', 'bastard', 'bitch', 'ass',
+            'piss', 'shit', 'fuck', 'fucking', 'fucked', 'motherfucker', 'cocksucker',
+            'dickhead', 'asshole', 'whore', 'slut', 'retard', 'gay', 'faggot', 'nigger',
+            'chink', 'spic', 'kike', 'wetback', 'gook', 'raghead', 'towelhead', 'camel jockey'
+        ];
+
+        function containsProfanity(text) {
+            const lowerText = text.toLowerCase();
+            return profanityList.some(word => {
+                const regex = new RegExp(`\\b${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+                return regex.test(lowerText);
+            });
+        }
+
+        function showWarning() {
+            elements.warningMessage.classList.add('show');
+            setTimeout(() => {
+                elements.warningMessage.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }, 100);
+        }
+
+        function closeWarning() {
+            elements.warningMessage.classList.remove('show');
+        }
+
+        function validateAndUpdateText() {
+            const text = elements.wishText.value;
+
+            if (containsProfanity(text)) {
+                showWarning();
+                elements.wishText.value = text.slice(0, -1);
+                return false;
+            }
+
+            closeWarning();
+            return true;
+        }
 
         function switchTab(tabName) {
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
@@ -869,8 +968,10 @@
         }
 
         elements.wishText.addEventListener('input', () => {
-            updateCharCount();
-            updateCanvas();
+            if (validateAndUpdateText()) {
+                updateCharCount();
+                updateCanvas();
+            }
         });
 
         elements.photoUpload.addEventListener('change', (e) => {
