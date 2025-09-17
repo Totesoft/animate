@@ -38,23 +38,117 @@
             margin-bottom: 10px;
         }
 
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .text-input-section {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 30px;
+            border-radius: 20px;
+            color: white;
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+        }
+
+        .text-input-section h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.5em;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .main-text-input {
+            width: 100%;
+            padding: 20px;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            resize: vertical;
+            min-height: 120px;
+            font-family: Arial, sans-serif;
+        }
+
+        .main-text-input:focus {
+            outline: none;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .main-text-input::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
         .controls {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .controls-collapsed {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
 
         .control-group {
             background: #f8f9fa;
-            padding: 20px;
+            padding: 15px;
             border-radius: 15px;
         }
 
         .control-group h3 {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             color: #333;
-            font-size: 1.1em;
+            font-size: 1em;
+        }
+
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .canvas-section {
+            flex: 1;
+        }
+
+        .session-info {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 14px;
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .session-info strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .timer {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 5px;
         }
 
         .input-group {
@@ -439,14 +533,33 @@
         }
 
         @media (max-width: 1024px) {
-            .controls {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .controls-collapsed {
                 grid-template-columns: 1fr 1fr;
             }
         }
 
         @media (max-width: 768px) {
-            .controls {
+            .main-layout {
                 grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .controls-collapsed {
+                grid-template-columns: 1fr;
+            }
+
+            .text-input-section {
+                padding: 20px;
+            }
+
+            .main-text-input {
+                font-size: 16px;
+                padding: 15px;
+                min-height: 100px;
             }
         }
     </style>
@@ -464,155 +577,173 @@
             <button class="close-warning" onclick="closeWarning()">I Understand</button>
         </div>
 
-        <div class="tab-container">
-            <button class="tab active" onclick="switchTab('text')">📝 Text & Animation</button>
-            <button class="tab" onclick="switchTab('media')">🖼️ Media & Effects</button>
-            <button class="tab" onclick="switchTab('climate')">🌦️ Climate Effects</button>
-        </div>
+        <div class="main-layout">
+            <div class="left-panel">
+                <div class="text-input-section">
+                    <h2>✨ Type Your Birthday Message</h2>
+                    <textarea class="main-text-input" id="wishText" placeholder="Type your amazing birthday message here... 🎉&#10;&#10;Make someone's day special with your words!" maxlength="255"></textarea>
+                    <div class="char-counter" style="text-align: center; margin-top: 15px; color: rgba(255,255,255,0.8);">
+                        Characters: <span id="charCount">0</span>/255
+                    </div>
+                </div>
 
-        <div class="controls">
-            <div id="textTab" class="tab-content active">
-                <div class="control-group">
-                    <h3>✨ Text & Animation</h3>
-                    <div class="input-group">
-                        <label for="wishText">Birthday Message (max 255 characters):</label>
-                        <input type="text" id="wishText" placeholder="Happy Birthday!" maxlength="255">
-                        <div class="char-counter">Characters: <span id="charCount">0</span>/255</div>
+                <div class="tab-container">
+                    <button class="tab active" onclick="switchTab('text')">📝 Animation</button>
+                    <button class="tab" onclick="switchTab('media')">🖼️ Media</button>
+                    <button class="tab" onclick="switchTab('climate')">🌦️ Effects</button>
+                </div>
+
+                <div class="controls">
+                    <div id="textTab" class="tab-content active">
+                        <div class="controls-collapsed">
+                            <div class="control-group">
+                                <h3>✨ Animation</h3>
+                                <div class="input-group">
+                                    <label for="animation">Animation:</label>
+                                    <select id="animation">
+                                        <option value="none">No Animation</option>
+                                        <option value="bounce">Bounce</option>
+                                        <option value="pulse">Pulse</option>
+                                        <option value="shake">Shake</option>
+                                        <option value="glow">Glow</option>
+                                        <option value="rainbow">Rainbow</option>
+                                        <option value="rotate">Rotate</option>
+                                        <option value="fadeIn">Fade In</option>
+                                        <option value="slideIn">Slide In</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="fontSize">Font Size:</label>
+                                    <input type="range" id="fontSize" min="20" max="120" value="60">
+                                    <div class="range-value">Size: <span id="fontSizeValue">60</span>px</div>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <h3>🎨 Text Style</h3>
+                                <div class="input-group">
+                                    <label for="fontFamily">Font:</label>
+                                    <select id="fontFamily">
+                                        <option value="Arial, sans-serif">Arial</option>
+                                        <option value="'Times New Roman', serif">Times New Roman</option>
+                                        <option value="'Courier New', monospace">Courier New</option>
+                                        <option value="'Comic Sans MS', cursive">Comic Sans MS</option>
+                                        <option value="'Impact', fantasy">Impact</option>
+                                        <option value="'Brush Script MT', cursive">Brush Script</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="textPosition">Position:</label>
+                                    <select id="textPosition">
+                                        <option value="center">Center</option>
+                                        <option value="top">Top</option>
+                                        <option value="bottom">Bottom</option>
+                                        <option value="left">Left</option>
+                                        <option value="right">Right</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="input-group">
-                        <label for="animation">Animation:</label>
-                        <select id="animation">
-                            <option value="none">No Animation</option>
-                            <option value="bounce">Bounce</option>
-                            <option value="pulse">Pulse</option>
-                            <option value="shake">Shake</option>
-                            <option value="glow">Glow</option>
-                            <option value="rainbow">Rainbow</option>
-                            <option value="rotate">Rotate</option>
-                            <option value="fadeIn">Fade In</option>
-                            <option value="slideIn">Slide In</option>
-                        </select>
+
+                    <div id="mediaTab" class="tab-content">
+                        <div class="controls-collapsed">
+                            <div class="control-group">
+                                <h3>🖼️ Photo Upload</h3>
+                                <div class="input-group">
+                                    <label for="photoUpload">Background Photo:</label>
+                                    <input type="file" id="photoUpload" accept="image/*">
+                                </div>
+                                <div class="input-group">
+                                    <label for="photoOpacity">Photo Opacity:</label>
+                                    <input type="range" id="photoOpacity" min="0" max="100" value="80">
+                                    <div class="range-value">Opacity: <span id="photoOpacityValue">80</span>%</div>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <h3>🎨 Colors</h3>
+                                <div class="input-group">
+                                    <label for="textColor">Text Color:</label>
+                                    <input type="color" id="textColor" value="#ffffff">
+                                </div>
+                                <div class="input-group">
+                                    <label for="strokeColor">Text Stroke:</label>
+                                    <input type="color" id="strokeColor" value="#000000">
+                                </div>
+                                <div class="input-group">
+                                    <label for="strokeWidth">Stroke Width:</label>
+                                    <input type="range" id="strokeWidth" min="0" max="10" value="2">
+                                    <div class="range-value">Width: <span id="strokeWidthValue">2</span>px</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="input-group">
-                        <label for="fontSize">Font Size:</label>
-                        <input type="range" id="fontSize" min="20" max="120" value="60">
-                        <div class="range-value">Size: <span id="fontSizeValue">60</span>px</div>
+
+                    <div id="climateTab" class="tab-content">
+                        <div class="controls-collapsed">
+                            <div class="control-group">
+                                <h3>🌦️ Climate Effects</h3>
+                                <div class="input-group">
+                                    <label for="climateEffect">Effect:</label>
+                                    <select id="climateEffect">
+                                        <option value="none">No Effect</option>
+                                        <option value="snow">Snow ❄️</option>
+                                        <option value="rain">Rain 🌧️</option>
+                                        <option value="hearts">Hearts 💕</option>
+                                        <option value="stars">Stars ⭐</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="particleIntensity">Intensity:</label>
+                                    <input type="range" id="particleIntensity" min="1" max="10" value="5">
+                                    <div class="range-value">Level: <span id="particleIntensityValue">5</span></div>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <h3>🌈 Background</h3>
+                                <div class="input-group">
+                                    <label for="backgroundType">Type:</label>
+                                    <select id="backgroundType">
+                                        <option value="solid">Solid Color</option>
+                                        <option value="gradient">Gradient</option>
+                                        <option value="photo">Photo Only</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="gradientColor1">Color 1:</label>
+                                    <input type="color" id="gradientColor1" value="#667eea">
+                                </div>
+                                <div class="input-group">
+                                    <label for="gradientColor2">Color 2:</label>
+                                    <input type="color" id="gradientColor2" value="#764ba2">
+                                </div>
+                                <div class="input-group">
+                                    <label for="gradientDirection">Direction:</label>
+                                    <select id="gradientDirection">
+                                        <option value="linear-gradient(135deg,">Diagonal</option>
+                                        <option value="linear-gradient(90deg,">Horizontal</option>
+                                        <option value="linear-gradient(0deg,">Vertical</option>
+                                        <option value="radial-gradient(circle,">Radial</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div id="mediaTab" class="tab-content">
-                <div class="control-group">
-                    <h3>🖼️ Photo Upload</h3>
-                    <div class="input-group">
-                        <label for="photoUpload">Upload Background Photo:</label>
-                        <input type="file" id="photoUpload" accept="image/*">
-                    </div>
-                    <div class="input-group">
-                        <label for="photoOpacity">Photo Opacity:</label>
-                        <input type="range" id="photoOpacity" min="0" max="100" value="80">
-                        <div class="range-value">Opacity: <span id="photoOpacityValue">80</span>%</div>
-                    </div>
-                    <div class="input-group">
-                        <label for="textPosition">Text Position:</label>
-                        <select id="textPosition">
-                            <option value="center">Center</option>
-                            <option value="top">Top</option>
-                            <option value="bottom">Bottom</option>
-                            <option value="left">Left</option>
-                            <option value="right">Right</option>
-                        </select>
-                    </div>
+            <div class="right-panel">
+                <div class="session-info">
+                    <strong>🎯 Your Personal Session</strong>
+                    Session ID: <span id="sessionId">Loading...</span><br>
+                    Time Remaining: <span class="timer" id="sessionTimer">12:00:00</span>
                 </div>
-            </div>
 
-            <div id="climateTab" class="tab-content">
-                <div class="control-group">
-                    <h3>🌦️ Climate Effects</h3>
-                    <div class="input-group">
-                        <label for="climateEffect">Climate Effect:</label>
-                        <select id="climateEffect">
-                            <option value="none">No Effect</option>
-                            <option value="snow">Snow ❄️</option>
-                            <option value="rain">Rain 🌧️</option>
-                            <option value="hearts">Hearts 💕</option>
-                            <option value="stars">Stars ⭐</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label for="particleIntensity">Effect Intensity:</label>
-                        <input type="range" id="particleIntensity" min="1" max="10" value="5">
-                        <div class="range-value">Intensity: <span id="particleIntensityValue">5</span></div>
+                <div class="canvas-section">
+                    <div class="canvas-container">
+                        <canvas id="mainCanvas" width="800" height="600"></canvas>
+                        <div class="climate-overlay" id="climateOverlay"></div>
                     </div>
                 </div>
-            </div>
-
-            <div class="control-group">
-                <h3>🎨 Colors & Style</h3>
-                <div class="color-controls">
-                    <div class="input-group">
-                        <label for="textColor">Text Color:</label>
-                        <input type="color" id="textColor" value="#ffffff">
-                    </div>
-                    <div class="input-group">
-                        <label for="strokeColor">Text Stroke:</label>
-                        <input type="color" id="strokeColor" value="#000000">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label for="strokeWidth">Stroke Width:</label>
-                    <input type="range" id="strokeWidth" min="0" max="10" value="2">
-                    <div class="range-value">Width: <span id="strokeWidthValue">2</span>px</div>
-                </div>
-                <div class="input-group">
-                    <label for="fontFamily">Font Style:</label>
-                    <select id="fontFamily">
-                        <option value="Arial, sans-serif">Arial</option>
-                        <option value="'Times New Roman', serif">Times New Roman</option>
-                        <option value="'Courier New', monospace">Courier New</option>
-                        <option value="'Comic Sans MS', cursive">Comic Sans MS</option>
-                        <option value="'Impact', fantasy">Impact</option>
-                        <option value="'Brush Script MT', cursive">Brush Script</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <h3>🌈 Background Effects</h3>
-                <div class="input-group">
-                    <label for="backgroundType">Background Type:</label>
-                    <select id="backgroundType">
-                        <option value="solid">Solid Color</option>
-                        <option value="gradient">Gradient</option>
-                        <option value="photo">Photo Only</option>
-                    </select>
-                </div>
-                <div class="gradient-controls">
-                    <div class="input-group">
-                        <label for="gradientColor1">Gradient Color 1:</label>
-                        <input type="color" id="gradientColor1" value="#667eea">
-                    </div>
-                    <div class="input-group">
-                        <label for="gradientColor2">Gradient Color 2:</label>
-                        <input type="color" id="gradientColor2" value="#764ba2">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label for="gradientDirection">Gradient Direction:</label>
-                    <select id="gradientDirection">
-                        <option value="linear-gradient(135deg,">Diagonal</option>
-                        <option value="linear-gradient(90deg,">Horizontal</option>
-                        <option value="linear-gradient(0deg,">Vertical</option>
-                        <option value="radial-gradient(circle,">Radial</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="preview-container">
-            <div class="canvas-container">
-                <canvas id="mainCanvas" width="800" height="600"></canvas>
-                <div class="climate-overlay" id="climateOverlay"></div>
             </div>
         </div>
 
@@ -635,6 +766,13 @@
         let backgroundImage = null;
         let animationId = null;
         let particles = [];
+
+        let userSession = {
+            id: '',
+            startTime: null,
+            endTime: null,
+            data: {}
+        };
 
         const elements = {
             wishText: document.getElementById('wishText'),
@@ -659,8 +797,141 @@
             particleIntensity: document.getElementById('particleIntensity'),
             particleIntensityValue: document.getElementById('particleIntensityValue'),
             climateOverlay: document.getElementById('climateOverlay'),
-            warningMessage: document.getElementById('warningMessage')
+            warningMessage: document.getElementById('warningMessage'),
+            sessionId: document.getElementById('sessionId'),
+            sessionTimer: document.getElementById('sessionTimer')
         };
+
+        function generateSessionId() {
+            return 'BWC-' + Math.random().toString(36).substring(2, 8).toUpperCase() +
+                   '-' + Date.now().toString(36).toUpperCase();
+        }
+
+        function initializeSession() {
+            const existingSession = localStorage.getItem('birthdayWishSession');
+            const now = new Date().getTime();
+
+            if (existingSession) {
+                const session = JSON.parse(existingSession);
+                const sessionAge = now - session.startTime;
+                const twelveHours = 12 * 60 * 60 * 1000;
+
+                if (sessionAge < twelveHours) {
+                    userSession = session;
+                    loadSessionData();
+                } else {
+                    createNewSession();
+                }
+            } else {
+                createNewSession();
+            }
+
+            updateSessionDisplay();
+            startSessionTimer();
+        }
+
+        function createNewSession() {
+            const now = new Date().getTime();
+            userSession = {
+                id: generateSessionId(),
+                startTime: now,
+                endTime: now + (12 * 60 * 60 * 1000),
+                data: {
+                    wishText: '',
+                    animation: 'none',
+                    fontSize: 60,
+                    textColor: '#ffffff',
+                    strokeColor: '#000000',
+                    strokeWidth: 2,
+                    fontFamily: 'Arial, sans-serif',
+                    textPosition: 'center',
+                    backgroundType: 'gradient',
+                    gradientColor1: '#667eea',
+                    gradientColor2: '#764ba2',
+                    gradientDirection: 'linear-gradient(135deg,',
+                    climateEffect: 'none',
+                    particleIntensity: 5,
+                    photoOpacity: 80
+                }
+            };
+            saveSession();
+        }
+
+        function saveSession() {
+            userSession.data = {
+                wishText: elements.wishText.value,
+                animation: elements.animation.value,
+                fontSize: elements.fontSize.value,
+                textColor: elements.textColor.value,
+                strokeColor: elements.strokeColor.value,
+                strokeWidth: elements.strokeWidth.value,
+                fontFamily: elements.fontFamily.value,
+                textPosition: elements.textPosition.value,
+                backgroundType: elements.backgroundType.value,
+                gradientColor1: elements.gradientColor1.value,
+                gradientColor2: elements.gradientColor2.value,
+                gradientDirection: elements.gradientDirection.value,
+                climateEffect: elements.climateEffect.value,
+                particleIntensity: elements.particleIntensity.value,
+                photoOpacity: elements.photoOpacity.value
+            };
+            localStorage.setItem('birthdayWishSession', JSON.stringify(userSession));
+        }
+
+        function loadSessionData() {
+            const data = userSession.data;
+            elements.wishText.value = data.wishText || '';
+            elements.animation.value = data.animation || 'none';
+            elements.fontSize.value = data.fontSize || 60;
+            elements.textColor.value = data.textColor || '#ffffff';
+            elements.strokeColor.value = data.strokeColor || '#000000';
+            elements.strokeWidth.value = data.strokeWidth || 2;
+            elements.fontFamily.value = data.fontFamily || 'Arial, sans-serif';
+            elements.textPosition.value = data.textPosition || 'center';
+            elements.backgroundType.value = data.backgroundType || 'gradient';
+            elements.gradientColor1.value = data.gradientColor1 || '#667eea';
+            elements.gradientColor2.value = data.gradientColor2 || '#764ba2';
+            elements.gradientDirection.value = data.gradientDirection || 'linear-gradient(135deg,';
+            elements.climateEffect.value = data.climateEffect || 'none';
+            elements.particleIntensity.value = data.particleIntensity || 5;
+            elements.photoOpacity.value = data.photoOpacity || 80;
+
+            updateRangeValues();
+            updateCharCount();
+        }
+
+        function updateSessionDisplay() {
+            elements.sessionId.textContent = userSession.id;
+        }
+
+        function startSessionTimer() {
+            setInterval(() => {
+                const now = new Date().getTime();
+                const timeLeft = userSession.endTime - now;
+
+                if (timeLeft <= 0) {
+                    resetSession();
+                    return;
+                }
+
+                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                elements.sessionTimer.textContent =
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function resetSession() {
+            localStorage.removeItem('birthdayWishSession');
+            createNewSession();
+            loadSessionData();
+            updateSessionDisplay();
+            updateCanvas();
+            backgroundImage = null;
+            elements.climateOverlay.innerHTML = '';
+        }
 
         const profanityList = [
             'damn', 'hell', 'crap', 'stupid', 'idiot', 'moron', 'dumb', 'hate', 'suck', 'loser',
@@ -971,6 +1242,7 @@
             if (validateAndUpdateText()) {
                 updateCharCount();
                 updateCanvas();
+                saveSession();
             }
         });
 
@@ -994,15 +1266,20 @@
             slider.addEventListener('input', () => {
                 updateRangeValues();
                 updateCanvas();
+                saveSession();
             });
         });
 
         [elements.animation, elements.textColor, elements.strokeColor, elements.fontFamily,
          elements.textPosition, elements.backgroundType, elements.gradientColor1,
          elements.gradientColor2, elements.gradientDirection, elements.climateEffect].forEach(control => {
-            control.addEventListener('change', updateCanvas);
+            control.addEventListener('change', () => {
+                updateCanvas();
+                saveSession();
+            });
         });
 
+        initializeSession();
         updateRangeValues();
         updateCharCount();
         updateCanvas();
