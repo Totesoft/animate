@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Wish Creator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .control-group {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .control-group h3 {
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 1.2em;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        input[type="color"] {
+            width: 50px;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .color-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .preview-area {
+            background: #000;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wish-text {
+            font-size: 3em;
+            font-weight: bold;
+            color: #ff6b6b;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            word-wrap: break-word;
+            max-width: 100%;
+        }
+
+        .button-group {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .char-counter {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            10%, 30%, 50%, 70%, 90% {
+                transform: translateX(-10px);
+            }
+            20%, 40%, 60%, 80% {
+                transform: translateX(10px);
+            }
+        }
+
+        @keyframes glow {
+            0% {
+                text-shadow: 0 0 5px currentColor;
+            }
+            50% {
+                text-shadow: 0 0 20px currentColor, 0 0 30px currentColor;
+            }
+            100% {
+                text-shadow: 0 0 5px currentColor;
+            }
+        }
+
+        @keyframes rainbow {
+            0% { color: #ff0000; }
+            16% { color: #ff8000; }
+            33% { color: #ffff00; }
+            50% { color: #00ff00; }
+            66% { color: #0080ff; }
+            83% { color: #8000ff; }
+            100% { color: #ff0000; }
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .animation-bounce {
+            animation: bounce 2s infinite;
+        }
+
+        .animation-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .animation-shake {
+            animation: shake 0.8s infinite;
+        }
+
+        .animation-glow {
+            animation: glow 2s infinite;
+        }
+
+        .animation-rainbow {
+            animation: rainbow 3s infinite;
+        }
+
+        .animation-rotate {
+            animation: rotate 3s linear infinite;
+        }
+
+        @media print {
+            body {
+                background: white !important;
+            }
+            .controls, .button-group {
+                display: none !important;
+            }
+            .container {
+                box-shadow: none !important;
+                padding: 0 !important;
+            }
+            .preview-area {
+                background: white !important;
+                color: black !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎉 Birthday Wish Creator 🎂</h1>
+            <p>Create personalized animated birthday wishes!</p>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <h3>✨ Text & Animation</h3>
+                <div class="input-group">
+                    <label for="wishText">Birthday Message (max 255 characters):</label>
+                    <input type="text" id="wishText" placeholder="Happy Birthday!" maxlength="255">
+                    <div class="char-counter">Characters: <span id="charCount">0</span>/255</div>
+                </div>
+                <div class="input-group">
+                    <label for="animation">Animation:</label>
+                    <select id="animation">
+                        <option value="none">No Animation</option>
+                        <option value="bounce">Bounce</option>
+                        <option value="pulse">Pulse</option>
+                        <option value="shake">Shake</option>
+                        <option value="glow">Glow</option>
+                        <option value="rainbow">Rainbow</option>
+                        <option value="rotate">Rotate</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="fontSize">Font Size:</label>
+                    <select id="fontSize">
+                        <option value="1em">Small</option>
+                        <option value="2em">Medium</option>
+                        <option value="3em" selected>Large</option>
+                        <option value="4em">Extra Large</option>
+                        <option value="5em">Huge</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>🎨 Colors & Style</h3>
+                <div class="color-controls">
+                    <div class="input-group">
+                        <label for="textColor">Text Color:</label>
+                        <input type="color" id="textColor" value="#ff6b6b">
+                    </div>
+                    <div class="input-group">
+                        <label for="bgColor">Background Color:</label>
+                        <input type="color" id="bgColor" value="#000000">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="fontFamily">Font Style:</label>
+                    <select id="fontFamily">
+                        <option value="Arial, sans-serif">Arial</option>
+                        <option value="'Times New Roman', serif">Times New Roman</option>
+                        <option value="'Courier New', monospace">Courier New</option>
+                        <option value="'Comic Sans MS', cursive">Comic Sans MS</option>
+                        <option value="'Impact', fantasy">Impact</option>
+                        <option value="'Brush Script MT', cursive">Brush Script</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="textAlign">Text Alignment:</label>
+                    <select id="textAlign">
+                        <option value="center" selected>Center</option>
+                        <option value="left">Left</option>
+                        <option value="right">Right</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="preview-area" id="previewArea">
+            <div class="wish-text" id="wishDisplay">Happy Birthday! 🎉</div>
+        </div>
+
+        <div class="button-group">
+            <button onclick="randomizeColors()">🎲 Random Colors</button>
+            <button onclick="printWish()">🖨️ Print Wish</button>
+            <button onclick="resetAll()">🔄 Reset</button>
+        </div>
+    </div>
+
+    <script>
+        const wishText = document.getElementById('wishText');
+        const wishDisplay = document.getElementById('wishDisplay');
+        const previewArea = document.getElementById('previewArea');
+        const charCount = document.getElementById('charCount');
+        const animation = document.getElementById('animation');
+        const textColor = document.getElementById('textColor');
+        const bgColor = document.getElementById('bgColor');
+        const fontSize = document.getElementById('fontSize');
+        const fontFamily = document.getElementById('fontFamily');
+        const textAlign = document.getElementById('textAlign');
+
+        function updateWish() {
+            const text = wishText.value || 'Happy Birthday! 🎉';
+            wishDisplay.textContent = text;
+            charCount.textContent = wishText.value.length;
+        }
+
+        function updateAnimation() {
+            wishDisplay.className = 'wish-text';
+            if (animation.value !== 'none') {
+                wishDisplay.classList.add(`animation-${animation.value}`);
+            }
+        }
+
+        function updateColors() {
+            if (animation.value === 'rainbow') {
+                wishDisplay.style.color = '';
+            } else {
+                wishDisplay.style.color = textColor.value;
+            }
+            previewArea.style.backgroundColor = bgColor.value;
+        }
+
+        function updateStyles() {
+            wishDisplay.style.fontSize = fontSize.value;
+            wishDisplay.style.fontFamily = fontFamily.value;
+            previewArea.style.textAlign = textAlign.value;
+        }
+
+        function randomizeColors() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7', '#fd79a8', '#00b894', '#fdcb6e'];
+            const bgColors = ['#000000', '#2c3e50', '#34495e', '#8e44ad', '#e74c3c', '#d35400', '#27ae60', '#2980b9', '#f39c12'];
+
+            textColor.value = colors[Math.floor(Math.random() * colors.length)];
+            bgColor.value = bgColors[Math.floor(Math.random() * bgColors.length)];
+            updateColors();
+        }
+
+        function printWish() {
+            window.print();
+        }
+
+        function resetAll() {
+            wishText.value = '';
+            animation.value = 'none';
+            textColor.value = '#ff6b6b';
+            bgColor.value = '#000000';
+            fontSize.value = '3em';
+            fontFamily.value = 'Arial, sans-serif';
+            textAlign.value = 'center';
+
+            updateWish();
+            updateAnimation();
+            updateColors();
+            updateStyles();
+        }
+
+        wishText.addEventListener('input', updateWish);
+        animation.addEventListener('change', updateAnimation);
+        textColor.addEventListener('change', updateColors);
+        bgColor.addEventListener('change', updateColors);
+        fontSize.addEventListener('change', updateStyles);
+        fontFamily.addEventListener('change', updateStyles);
+        textAlign.addEventListener('change', updateStyles);
+
+        updateWish();
+        updateColors();
+        updateStyles();
+    </script>
+</body>
+</html>
