@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Greeting Card Creator - Birthday Wishes</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         * {
             margin: 0;
@@ -530,11 +531,63 @@
 
         .nav-header {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
+            flex-direction: column;
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .nav-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .user-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .login-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .login-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .user-info {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 12px;
+        }
+
+        .user-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 10px;
         }
 
         .nav-logo {
@@ -1033,6 +1086,103 @@
             }
         }
 
+        .rsvp-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .rsvp-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+
+        .rsvp-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+
+        .rsvp-item.declined {
+            border-left-color: #dc3545;
+        }
+
+        .rsvp-item.maybe {
+            border-left-color: #ffc107;
+        }
+
+        .rsvp-status {
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            color: white;
+        }
+
+        .rsvp-status.accepted {
+            background: #28a745;
+        }
+
+        .rsvp-status.declined {
+            background: #dc3545;
+        }
+
+        .rsvp-status.maybe {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .saved-evites {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .evite-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .evite-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .evite-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .evite-date {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .evite-stats {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
         @media print {
             body {
                 background: white !important;
@@ -1082,12 +1232,40 @@
     <div class="main-container">
         <nav class="side-nav" id="sideNav">
             <div class="nav-header">
-                <div class="nav-logo">
-                    <span class="nav-text">🎉 Creator</span>
+                <div class="nav-top">
+                    <div class="nav-logo">
+                        <span class="nav-text">🎉 Creator</span>
+                    </div>
+                    <button class="nav-toggle" onclick="toggleNav()">
+                        <span>◀</span>
+                    </button>
                 </div>
-                <button class="nav-toggle" onclick="toggleNav()">
-                    <span>◀</span>
-                </button>
+                <div class="user-section">
+                    <div id="g_id_onload"
+                         data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                         data-callback="handleCredentialResponse"
+                         data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin"
+                         data-type="standard"
+                         data-size="medium"
+                         data-theme="outline"
+                         data-text="sign_in_with"
+                         data-shape="rectangular"
+                         data-logo_alignment="left"
+                         style="display: none;">
+                    </div>
+                    <button class="login-btn" id="loginBtn" onclick="showLogin()">
+                        <span class="nav-text">👤 Sign In</span>
+                    </button>
+                    <div class="user-info" id="userInfo">
+                        <img class="user-avatar" id="userAvatar" src="" alt="User">
+                        <span class="nav-text" id="userName">User</span>
+                        <button class="logout-btn" onclick="logout()">
+                            <span class="nav-text">Sign Out</span>
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <ul class="nav-items">
@@ -1113,6 +1291,18 @@
                     <div class="nav-link" onclick="startMode('evite')" data-mode="evite">
                         <span class="nav-icon">🎊</span>
                         <span class="nav-text">E-vites</span>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link" onclick="showSavedEvites()" id="savedEvitesNav" style="display: none;">
+                        <span class="nav-icon">💾</span>
+                        <span class="nav-text">My Evites</span>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link" onclick="showRSVPDashboard()" id="rsvpDashboardNav" style="display: none;">
+                        <span class="nav-icon">📊</span>
+                        <span class="nav-text">RSVP Dashboard</span>
                     </div>
                 </li>
             </ul>
@@ -1141,6 +1331,33 @@
                             <span class="mode-card-icon">🎊</span>
                             <h3>Birthday E-vites</h3>
                             <p>Create and send beautiful digital party invitations with RSVP tracking, event details, and celebration themes.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Saved Evites Section -->
+                <div class="saved-evites-page" id="savedEvitesPage" style="display: none;">
+                    <div class="header">
+                        <h1>💾 My Saved E-vites</h1>
+                        <p>Manage your created invitations and track RSVPs</p>
+                    </div>
+
+                    <div class="saved-evites" id="savedEvitesList">
+                        <p>No saved e-vites yet. Create your first one!</p>
+                    </div>
+                </div>
+
+                <!-- RSVP Dashboard Section -->
+                <div class="rsvp-dashboard-page" id="rsvpDashboardPage" style="display: none;">
+                    <div class="header">
+                        <h1>📊 RSVP Dashboard</h1>
+                        <p>Track responses for all your events</p>
+                    </div>
+
+                    <div class="rsvp-section" id="rsvpSection">
+                        <h3>Recent RSVP Activity</h3>
+                        <div class="rsvp-list" id="rsvpList">
+                            <p>No RSVP activity yet.</p>
                         </div>
                     </div>
                 </div>
@@ -1431,6 +1648,8 @@
         <div class="download-buttons">
             <button onclick="downloadImage('png')">📥 Download PNG</button>
             <button onclick="downloadImage('jpeg')">📥 Download JPG</button>
+            <button onclick="saveEvite()" id="saveEviteBtn" style="display: none;">💾 Save E-vite</button>
+            <button onclick="shareEvite()" id="shareEviteBtn" style="display: none;">📤 Share E-vite</button>
         </div>
 
         <div class="session-toast" id="sessionToast" onclick="toggleSessionToast()">
@@ -1454,6 +1673,8 @@
     <script>
         let currentMode = 'simple';
         let currentTemplate = 'classic';
+        let currentUser = null;
+        let savedEvites = [];
 
         const canvas = document.getElementById('mainCanvas');
         const ctx = canvas.getContext('2d');
@@ -1648,15 +1869,15 @@
         }
 
         function showIntro() {
-            elements.introPage.classList.remove('hidden');
-            elements.appContent.classList.remove('active');
+            hideAllPages();
+            elements.introPage.style.display = 'block';
             currentMode = null;
             updateNavActiveState();
         }
 
         function startMode(mode) {
-            elements.introPage.classList.add('hidden');
-            elements.appContent.classList.add('active');
+            hideAllPages();
+            elements.appContent.style.display = 'block';
             switchMode(mode);
             updateNavActiveState();
         }
@@ -1701,6 +1922,12 @@
                 elements.simpleCanvas.style.display = 'none';
                 elements.cardPreview.style.display = 'block';
                 elements.sharingSection.style.display = 'block';
+
+                // Show save/share buttons if user is logged in
+                if (currentUser) {
+                    document.getElementById('saveEviteBtn').style.display = 'inline-block';
+                    document.getElementById('shareEviteBtn').style.display = 'inline-block';
+                }
                 updateCardPreview();
             }
 
@@ -1734,6 +1961,291 @@
             updateCardPreview();
             updateCanvas();
             saveSession();
+        }
+
+        // Authentication Functions
+        function handleCredentialResponse(response) {
+            const responsePayload = decodeJwtResponse(response.credential);
+
+            currentUser = {
+                id: responsePayload.sub,
+                name: responsePayload.name,
+                email: responsePayload.email,
+                picture: responsePayload.picture
+            };
+
+            showUserLoggedIn();
+            loadUserData();
+        }
+
+        function decodeJwtResponse(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
+        function showLogin() {
+            document.querySelector('.g_id_signin').style.display = 'block';
+        }
+
+        function showUserLoggedIn() {
+            document.getElementById('loginBtn').style.display = 'none';
+            document.querySelector('.g_id_signin').style.display = 'none';
+            document.getElementById('userInfo').style.display = 'flex';
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userAvatar').src = currentUser.picture;
+
+            // Show user-specific navigation items
+            document.getElementById('savedEvitesNav').style.display = 'block';
+            document.getElementById('rsvpDashboardNav').style.display = 'block';
+
+            // Show save/share buttons in evite mode
+            if (currentMode === 'evite') {
+                document.getElementById('saveEviteBtn').style.display = 'inline-block';
+                document.getElementById('shareEviteBtn').style.display = 'inline-block';
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('loginBtn').style.display = 'block';
+            document.getElementById('userInfo').style.display = 'none';
+            document.getElementById('savedEvitesNav').style.display = 'none';
+            document.getElementById('rsvpDashboardNav').style.display = 'none';
+            document.getElementById('saveEviteBtn').style.display = 'none';
+            document.getElementById('shareEviteBtn').style.display = 'none';
+
+            // Clear user data
+            savedEvites = [];
+            showIntro();
+        }
+
+        // RSVP and Evite Management Functions
+        function saveEvite() {
+            if (!currentUser) {
+                alert('Please sign in to save your e-vite');
+                return;
+            }
+
+            const eviteData = {
+                id: Date.now(),
+                userId: currentUser.id,
+                title: elements.occasion.value || 'Birthday Party',
+                recipientName: elements.recipientName.value,
+                senderName: elements.senderName.value,
+                message: elements.wishText.value,
+                date: new Date().toLocaleDateString(),
+                template: currentTemplate,
+                rsvps: []
+            };
+
+            savedEvites.push(eviteData);
+            saveUserData();
+            alert('E-vite saved successfully!');
+        }
+
+        function shareEvite() {
+            if (!currentUser) {
+                alert('Please sign in to share your e-vite');
+                return;
+            }
+
+            const shareUrl = generateShareableLink();
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Birthday Party Invitation',
+                    text: `You're invited to ${elements.occasion.value || 'a birthday party'}!`,
+                    url: shareUrl
+                });
+            } else {
+                navigator.clipboard.writeText(shareUrl);
+                alert('Share link copied to clipboard!');
+            }
+        }
+
+        function generateShareableLink() {
+            const eviteData = encodeURIComponent(JSON.stringify({
+                occasion: elements.occasion.value,
+                recipientName: elements.recipientName.value,
+                senderName: elements.senderName.value,
+                message: elements.wishText.value,
+                template: currentTemplate
+            }));
+            return `${window.location.origin}${window.location.pathname}?rsvp=${eviteData}`;
+        }
+
+        function showSavedEvites() {
+            hideAllPages();
+            document.getElementById('savedEvitesPage').style.display = 'block';
+            loadSavedEvites();
+        }
+
+        function showRSVPDashboard() {
+            hideAllPages();
+            document.getElementById('rsvpDashboardPage').style.display = 'block';
+            loadRSVPData();
+        }
+
+        function hideAllPages() {
+            document.getElementById('introPage').style.display = 'none';
+            document.getElementById('appContent').style.display = 'none';
+            document.getElementById('savedEvitesPage').style.display = 'none';
+            document.getElementById('rsvpDashboardPage').style.display = 'none';
+        }
+
+        function loadSavedEvites() {
+            const container = document.getElementById('savedEvitesList');
+            if (savedEvites.length === 0) {
+                container.innerHTML = '<p>No saved e-vites yet. Create your first one!</p>';
+                return;
+            }
+
+            container.innerHTML = savedEvites.map(evite => `
+                <div class="evite-card" onclick="loadEvite('${evite.id}')">
+                    <div class="evite-title">${evite.title}</div>
+                    <div class="evite-date">Created: ${evite.date}</div>
+                    <div class="evite-stats">
+                        <div class="stat-item">
+                            <span>✅ ${evite.rsvps.filter(r => r.status === 'accepted').length}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>❌ ${evite.rsvps.filter(r => r.status === 'declined').length}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>❓ ${evite.rsvps.filter(r => r.status === 'maybe').length}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadRSVPData() {
+            const container = document.getElementById('rsvpList');
+            const allRSVPs = savedEvites.flatMap(evite =>
+                evite.rsvps.map(rsvp => ({...rsvp, eviteTitle: evite.title}))
+            );
+
+            if (allRSVPs.length === 0) {
+                container.innerHTML = '<p>No RSVP activity yet.</p>';
+                return;
+            }
+
+            container.innerHTML = allRSVPs.map(rsvp => `
+                <div class="rsvp-item ${rsvp.status}">
+                    <div>
+                        <strong>${rsvp.name}</strong> - ${rsvp.eviteTitle}
+                        <div style="font-size: 12px; color: #666;">${rsvp.email}</div>
+                    </div>
+                    <div class="rsvp-status ${rsvp.status}">${rsvp.status.toUpperCase()}</div>
+                </div>
+            `).join('');
+        }
+
+        function loadEvite(eviteId) {
+            const evite = savedEvites.find(e => e.id == eviteId);
+            if (evite) {
+                startMode('evite');
+                elements.occasion.value = evite.title;
+                elements.recipientName.value = evite.recipientName;
+                elements.senderName.value = evite.senderName;
+                elements.wishText.value = evite.message;
+                currentTemplate = evite.template;
+                updateCardPreview();
+            }
+        }
+
+        function saveUserData() {
+            if (currentUser) {
+                localStorage.setItem(`userData_${currentUser.id}`, JSON.stringify({
+                    savedEvites: savedEvites
+                }));
+            }
+        }
+
+        function loadUserData() {
+            if (currentUser) {
+                const userData = localStorage.getItem(`userData_${currentUser.id}`);
+                if (userData) {
+                    const data = JSON.parse(userData);
+                    savedEvites = data.savedEvites || [];
+                }
+            }
+        }
+
+        // Handle RSVP responses from URL parameters
+        function handleRSVPFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const rsvpData = urlParams.get('rsvp');
+            if (rsvpData) {
+                try {
+                    const eviteData = JSON.parse(decodeURIComponent(rsvpData));
+                    showRSVPForm(eviteData);
+                } catch (e) {
+                    console.error('Invalid RSVP data:', e);
+                }
+            }
+        }
+
+        function showRSVPForm(eviteData) {
+            // Create RSVP form overlay
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.8); z-index: 1000; display: flex;
+                align-items: center; justify-content: center;
+            `;
+            overlay.innerHTML = `
+                <div style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%;">
+                    <h2>🎉 You're Invited!</h2>
+                    <h3>${eviteData.occasion}</h3>
+                    <p><strong>From:</strong> ${eviteData.senderName}</p>
+                    <p><strong>Message:</strong> ${eviteData.message}</p>
+
+                    <div style="margin: 20px 0;">
+                        <label>Your Name:</label>
+                        <input type="text" id="rsvpName" style="width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px;">
+
+                        <label>Your Email:</label>
+                        <input type="email" id="rsvpEmail" style="width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px;">
+
+                        <label>Will you attend?</label>
+                        <div style="margin: 10px 0;">
+                            <button onclick="submitRSVP('accepted')" style="background: #28a745; color: white; padding: 10px 20px; margin: 5px; border: none; border-radius: 5px; cursor: pointer;">✅ Yes, I'll be there!</button>
+                            <button onclick="submitRSVP('declined')" style="background: #dc3545; color: white; padding: 10px 20px; margin: 5px; border: none; border-radius: 5px; cursor: pointer;">❌ Sorry, can't make it</button>
+                            <button onclick="submitRSVP('maybe')" style="background: #ffc107; color: black; padding: 10px 20px; margin: 5px; border: none; border-radius: 5px; cursor: pointer;">❓ Maybe</button>
+                        </div>
+                    </div>
+
+                    <button onclick="closeRSVPForm()" style="background: #6c757d; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; float: right;">Close</button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            window.rsvpOverlay = overlay;
+        }
+
+        function submitRSVP(status) {
+            const name = document.getElementById('rsvpName').value;
+            const email = document.getElementById('rsvpEmail').value;
+
+            if (!name || !email) {
+                alert('Please fill in your name and email');
+                return;
+            }
+
+            // In a real app, this would send to a backend
+            console.log('RSVP Submitted:', { name, email, status });
+            alert(`Thank you! Your RSVP (${status}) has been recorded.`);
+            closeRSVPForm();
+        }
+
+        function closeRSVPForm() {
+            if (window.rsvpOverlay) {
+                document.body.removeChild(window.rsvpOverlay);
+                window.rsvpOverlay = null;
+            }
         }
 
         function updateCardPreview() {
@@ -2399,6 +2911,12 @@
         updateCharCount();
         updateCanvas();
         animate();
+
+        // Initialize RSVP and authentication
+        handleRSVPFromURL();
+
+        // Set Google OAuth client ID (replace with your actual client ID)
+        document.getElementById('g_id_onload').setAttribute('data-client_id', 'YOUR_GOOGLE_CLIENT_ID');
     </script>
 </body>
 </html>
