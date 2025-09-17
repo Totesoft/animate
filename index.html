@@ -319,6 +319,101 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
+        .session-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(46, 204, 113, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 12px;
+            min-width: 200px;
+        }
+
+        .session-toast.collapsed {
+            transform: translateX(calc(100% - 40px));
+        }
+
+        .session-toast .toast-icon {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        .session-toast.collapsed .toast-content {
+            display: none;
+        }
+
+        .session-toast.collapsed .toast-icon {
+            margin: 0;
+        }
+
+        .toast-content {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .template-section-right {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .template-section-right h3 {
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .template-grid-compact {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .template-card-compact {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            padding: 10px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 10px;
+        }
+
+        .template-card-compact:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .template-card-compact.active {
+            border-color: white;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .template-emoji-compact {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .top-section {
+            background: white;
+            border-radius: 0 0 20px 20px;
+            padding: 25px 30px;
+            margin: 0 -30px 30px -30px;
+            border-bottom: 1px solid #eee;
+        }
+
         .mode-selector {
             display: flex;
             gap: 15px;
@@ -326,27 +421,38 @@
             margin: 20px 0;
         }
 
-        .mode-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: #333;
-            border: 2px solid #ddd;
-            padding: 12px 25px;
-            border-radius: 25px;
+        .mode-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 10px 10px 0 0;
+            border-bottom: 2px solid #eee;
+            overflow: hidden;
+            margin: 0 -30px;
+            margin-bottom: 0;
+        }
+
+        .mode-tab {
+            flex: 1;
+            background: transparent;
+            color: #666;
+            border: none;
+            padding: 15px 20px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s;
             font-size: 14px;
+            border-bottom: 3px solid transparent;
         }
 
-        .mode-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        .mode-tab:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
         }
 
-        .mode-btn.active {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border-color: transparent;
+        .mode-tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom-color: #667eea;
         }
 
         .simple-mode .greeting-info-section,
@@ -777,14 +883,56 @@
         <div class="header">
             <h1>💌 Birthday Wish Creator 🎂</h1>
             <p>Create beautiful birthday wishes - choose Simple Design or Advanced E-Greeting Card!</p>
+        </div>
 
-            <div class="mode-selector" style="margin-top: 20px; text-align: center;">
-                <button class="mode-btn active" id="simpleMode" onclick="switchMode('simple')">
-                    🎨 Simple Wish Design
-                </button>
-                <button class="mode-btn" id="advancedMode" onclick="switchMode('advanced')">
-                    💌 Advanced E-Greeting
-                </button>
+        <div class="mode-tabs">
+            <button class="mode-tab active" id="simpleMode" onclick="switchMode('simple')">
+                🎨 Simple Wish Design
+            </button>
+            <button class="mode-tab" id="advancedMode" onclick="switchMode('advanced')">
+                💌 Advanced E-Greeting
+            </button>
+        </div>
+
+        <div class="top-section" id="topSection">
+            <div class="greeting-info-section" id="advancedInfo" style="display: none;">
+                <h2>📝 Greeting Card Details</h2>
+                <div class="info-grid">
+                    <input type="text" id="recipientName" class="info-input" placeholder="Recipient's Name" maxlength="50">
+                    <input type="text" id="senderName" class="info-input" placeholder="Your Name" maxlength="50">
+                    <input type="text" id="occasion" class="info-input" placeholder="Occasion (e.g., 25th Birthday)" maxlength="50">
+                    <input type="date" id="eventDate" class="info-input">
+                </div>
+            </div>
+
+            <div class="greeting-templates" id="advancedTemplates" style="display: none;">
+                <h3 style="margin-bottom: 10px; text-align: center;">🎨 Choose Template</h3>
+                <div class="template-grid" id="templateGrid">
+                    <div class="template-card active" data-template="classic">
+                        <span class="template-emoji">🎂</span>
+                        Classic
+                    </div>
+                    <div class="template-card" data-template="party">
+                        <span class="template-emoji">🎉</span>
+                        Party
+                    </div>
+                    <div class="template-card" data-template="elegant">
+                        <span class="template-emoji">✨</span>
+                        Elegant
+                    </div>
+                    <div class="template-card" data-template="fun">
+                        <span class="template-emoji">🎈</span>
+                        Fun
+                    </div>
+                    <div class="template-card" data-template="love">
+                        <span class="template-emoji">💖</span>
+                        Love
+                    </div>
+                    <div class="template-card" data-template="cute">
+                        <span class="template-emoji">🥳</span>
+                        Cute
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -796,46 +944,6 @@
 
         <div class="main-layout">
             <div class="left-panel">
-                <div class="greeting-info-section">
-                    <h2>📝 Greeting Card Details</h2>
-                    <div class="info-grid">
-                        <input type="text" id="recipientName" class="info-input" placeholder="Recipient's Name" maxlength="50">
-                        <input type="text" id="senderName" class="info-input" placeholder="Your Name" maxlength="50">
-                        <input type="text" id="occasion" class="info-input" placeholder="Occasion (e.g., 25th Birthday)" maxlength="50">
-                        <input type="date" id="eventDate" class="info-input">
-                    </div>
-                </div>
-
-                <div class="greeting-templates">
-                    <h3 style="margin-bottom: 10px; text-align: center;">🎨 Choose Template</h3>
-                    <div class="template-grid" id="templateGrid">
-                        <div class="template-card active" data-template="classic">
-                            <span class="template-emoji">🎂</span>
-                            Classic
-                        </div>
-                        <div class="template-card" data-template="party">
-                            <span class="template-emoji">🎉</span>
-                            Party
-                        </div>
-                        <div class="template-card" data-template="elegant">
-                            <span class="template-emoji">✨</span>
-                            Elegant
-                        </div>
-                        <div class="template-card" data-template="fun">
-                            <span class="template-emoji">🎈</span>
-                            Fun
-                        </div>
-                        <div class="template-card" data-template="love">
-                            <span class="template-emoji">💖</span>
-                            Love
-                        </div>
-                        <div class="template-card" data-template="cute">
-                            <span class="template-emoji">🥳</span>
-                            Cute
-                        </div>
-                    </div>
-                </div>
-
                 <div class="text-input-section">
                     <h2>✨ Your Personal Message</h2>
                     <textarea class="main-text-input" id="wishText" placeholder="Write your heartfelt birthday message here... 🎉&#10;&#10;Make this birthday extra special with your words!" maxlength="255"></textarea>
@@ -989,10 +1097,34 @@
             </div>
 
             <div class="right-panel">
-                <div class="session-info">
-                    <strong>🎯 Your Personal Session</strong>
-                    Session ID: <span id="sessionId">Loading...</span><br>
-                    Time Remaining: <span class="timer" id="sessionTimer">12:00:00</span>
+                <div class="template-section-right" id="templateSectionRight" style="display: none;">
+                    <h3>🎨 Choose Template</h3>
+                    <div class="template-grid-compact" id="templateGridCompact">
+                        <div class="template-card-compact active" data-template="classic">
+                            <span class="template-emoji-compact">🎂</span>
+                            Classic
+                        </div>
+                        <div class="template-card-compact" data-template="party">
+                            <span class="template-emoji-compact">🎉</span>
+                            Party
+                        </div>
+                        <div class="template-card-compact" data-template="elegant">
+                            <span class="template-emoji-compact">✨</span>
+                            Elegant
+                        </div>
+                        <div class="template-card-compact" data-template="fun">
+                            <span class="template-emoji-compact">🎈</span>
+                            Fun
+                        </div>
+                        <div class="template-card-compact" data-template="love">
+                            <span class="template-emoji-compact">💖</span>
+                            Love
+                        </div>
+                        <div class="template-card-compact" data-template="cute">
+                            <span class="template-emoji-compact">🥳</span>
+                            Cute
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card-preview" id="cardPreview" style="display: none;">
@@ -1050,6 +1182,14 @@
         <div class="download-buttons">
             <button onclick="downloadImage('png')">📥 Download PNG</button>
             <button onclick="downloadImage('jpeg')">📥 Download JPG</button>
+        </div>
+
+        <div class="session-toast" id="sessionToast" onclick="toggleSessionToast()">
+            <div class="toast-icon">⏱️</div>
+            <div class="toast-content">
+                <div><strong>Session:</strong> <span id="sessionIdToast">Loading...</span></div>
+                <div><strong>Time:</strong> <span id="sessionTimerToast">12:00:00</span></div>
+            </div>
         </div>
     </div>
 
@@ -1144,6 +1284,9 @@
             warningMessage: document.getElementById('warningMessage'),
             sessionId: document.getElementById('sessionId'),
             sessionTimer: document.getElementById('sessionTimer'),
+            sessionIdToast: document.getElementById('sessionIdToast'),
+            sessionTimerToast: document.getElementById('sessionTimerToast'),
+            sessionToast: document.getElementById('sessionToast'),
             recipientName: document.getElementById('recipientName'),
             senderName: document.getElementById('senderName'),
             occasion: document.getElementById('occasion'),
@@ -1156,8 +1299,19 @@
             simpleCanvas: document.getElementById('simpleCanvas'),
             sharingSection: document.getElementById('sharingSection'),
             shareableLink: document.getElementById('shareableLink'),
-            templateGrid: document.getElementById('templateGrid')
+            templateGrid: document.getElementById('templateGrid'),
+            templateGridCompact: document.getElementById('templateGridCompact'),
+            templateSectionRight: document.getElementById('templateSectionRight'),
+            advancedInfo: document.getElementById('advancedInfo'),
+            advancedTemplates: document.getElementById('advancedTemplates')
         };
+
+        let isToastCollapsed = false;
+
+        function toggleSessionToast() {
+            isToastCollapsed = !isToastCollapsed;
+            elements.sessionToast.classList.toggle('collapsed', isToastCollapsed);
+        }
 
         function switchMode(mode) {
             currentMode = mode;
@@ -1167,10 +1321,16 @@
             document.getElementById('advancedMode').classList.toggle('active', mode === 'advanced');
 
             if (mode === 'simple') {
+                elements.advancedInfo.style.display = 'none';
+                elements.advancedTemplates.style.display = 'none';
+                elements.templateSectionRight.style.display = 'none';
                 elements.simpleCanvas.style.display = 'block';
                 elements.cardPreview.style.display = 'none';
                 elements.sharingSection.style.display = 'none';
             } else {
+                elements.advancedInfo.style.display = 'block';
+                elements.advancedTemplates.style.display = 'block';
+                elements.templateSectionRight.style.display = 'block';
                 elements.simpleCanvas.style.display = 'none';
                 elements.cardPreview.style.display = 'block';
                 elements.sharingSection.style.display = 'block';
@@ -1183,10 +1343,12 @@
         function selectTemplate(templateName) {
             currentTemplate = templateName;
 
-            document.querySelectorAll('.template-card').forEach(card => {
+            document.querySelectorAll('.template-card, .template-card-compact').forEach(card => {
                 card.classList.remove('active');
             });
-            document.querySelector(`[data-template="${templateName}"]`).classList.add('active');
+            document.querySelectorAll(`[data-template="${templateName}"]`).forEach(card => {
+                card.classList.add('active');
+            });
 
             const template = greetingTemplates[templateName];
             elements.gradientColor1.value = template.colors.primary;
@@ -1318,7 +1480,8 @@
         }
 
         function updateSessionDisplay() {
-            elements.sessionId.textContent = userSession.id;
+            if (elements.sessionId) elements.sessionId.textContent = userSession.id;
+            if (elements.sessionIdToast) elements.sessionIdToast.textContent = userSession.id;
         }
 
         function startSessionTimer() {
@@ -1335,8 +1498,10 @@
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-                elements.sessionTimer.textContent =
-                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                if (elements.sessionTimer) elements.sessionTimer.textContent = timeString;
+                if (elements.sessionTimerToast) elements.sessionTimerToast.textContent = timeString;
             }, 1000);
         }
 
@@ -1781,6 +1946,14 @@
 
         elements.templateGrid.addEventListener('click', (e) => {
             const templateCard = e.target.closest('.template-card');
+            if (templateCard) {
+                const template = templateCard.dataset.template;
+                selectTemplate(template);
+            }
+        });
+
+        elements.templateGridCompact.addEventListener('click', (e) => {
+            const templateCard = e.target.closest('.template-card-compact');
             if (templateCard) {
                 const template = templateCard.dataset.template;
                 selectTemplate(template);
