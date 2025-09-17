@@ -496,6 +496,124 @@
             display: none;
         }
 
+        .main-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .side-nav {
+            width: 280px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .side-nav.collapsed {
+            width: 60px;
+        }
+
+        .side-nav.collapsed .nav-text {
+            display: none;
+        }
+
+        .side-nav.collapsed .nav-toggle {
+            transform: rotate(180deg);
+        }
+
+        .nav-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .nav-logo {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .nav-toggle {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-toggle:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .nav-items {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-link.active {
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+            margin-right: 15px;
+            font-size: 1.1em;
+        }
+
+        .nav-text {
+            transition: all 0.3s;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+
+        .main-content.expanded {
+            margin-left: 60px;
+        }
+
+        .container {
+            max-width: none;
+            margin: 0;
+            padding: 20px;
+        }
+
         .mode-selector {
             display: flex;
             gap: 15px;
@@ -961,33 +1079,73 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="intro-page" id="introPage">
-            <h1>🎉 Birthday Creator Studio 🎂</h1>
-            <p>Welcome to the ultimate birthday celebration toolkit! Create stunning wishes, beautiful e-greeting cards, or design exciting party invitations - all in one place.</p>
-
-            <div class="mode-cards">
-                <div class="mode-card" onclick="startMode('simple')">
-                    <span class="mode-card-icon">🎨</span>
-                    <h3>Simple Wish Design</h3>
-                    <p>Quick & beautiful birthday wishes with animations and effects. Perfect for social media, printing, or instant sharing!</p>
+    <div class="main-container">
+        <nav class="side-nav" id="sideNav">
+            <div class="nav-header">
+                <div class="nav-logo">
+                    <span class="nav-text">🎉 Creator</span>
                 </div>
-
-                <div class="mode-card" onclick="startMode('greeting')">
-                    <span class="mode-card-icon">💌</span>
-                    <h3>E-Greeting Cards</h3>
-                    <p>Professional greeting cards with personalized messages, templates, and full sharing capabilities across all platforms.</p>
-                </div>
-
-                <div class="mode-card" onclick="startMode('evite')">
-                    <span class="mode-card-icon">🎊</span>
-                    <h3>Birthday E-vites</h3>
-                    <p>Create and send beautiful digital party invitations with RSVP tracking, event details, and celebration themes.</p>
-                </div>
+                <button class="nav-toggle" onclick="toggleNav()">
+                    <span>◀</span>
+                </button>
             </div>
-        </div>
 
-        <div class="app-content" id="appContent">
+            <ul class="nav-items">
+                <li class="nav-item">
+                    <div class="nav-link active" onclick="showIntro()">
+                        <span class="nav-icon">🏠</span>
+                        <span class="nav-text">Home</span>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link" onclick="startMode('simple')" data-mode="simple">
+                        <span class="nav-icon">🎨</span>
+                        <span class="nav-text">Simple Design</span>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link" onclick="startMode('greeting')" data-mode="greeting">
+                        <span class="nav-icon">💌</span>
+                        <span class="nav-text">E-Greeting</span>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link" onclick="startMode('evite')" data-mode="evite">
+                        <span class="nav-icon">🎊</span>
+                        <span class="nav-text">E-vites</span>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="main-content" id="mainContent">
+            <div class="container">
+                <div class="intro-page" id="introPage">
+                    <h1>🎉 Birthday Creator Studio 🎂</h1>
+                    <p>Welcome to the ultimate birthday celebration toolkit! Create stunning wishes, beautiful e-greeting cards, or design exciting party invitations - all in one place.</p>
+
+                    <div class="mode-cards">
+                        <div class="mode-card" onclick="startMode('simple')">
+                            <span class="mode-card-icon">🎨</span>
+                            <h3>Simple Wish Design</h3>
+                            <p>Quick & beautiful birthday wishes with animations and effects. Perfect for social media, printing, or instant sharing!</p>
+                        </div>
+
+                        <div class="mode-card" onclick="startMode('greeting')">
+                            <span class="mode-card-icon">💌</span>
+                            <h3>E-Greeting Cards</h3>
+                            <p>Professional greeting cards with personalized messages, templates, and full sharing capabilities across all platforms.</p>
+                        </div>
+
+                        <div class="mode-card" onclick="startMode('evite')">
+                            <span class="mode-card-icon">🎊</span>
+                            <h3>Birthday E-vites</h3>
+                            <p>Create and send beautiful digital party invitations with RSVP tracking, event details, and celebration themes.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="app-content" id="appContent">
             <div class="header">
                 <h1 id="appTitle">💌 Birthday Wish Creator 🎂</h1>
                 <p id="appDescription">Create beautiful birthday wishes - choose your preferred style!</p>
@@ -1017,6 +1175,10 @@
                             <input type="text" id="senderName" class="info-input" placeholder="Your Name" maxlength="50">
                             <input type="text" id="occasion" class="info-input" placeholder="Occasion (e.g., 25th Birthday)" maxlength="50">
                             <input type="date" id="eventDate" class="info-input">
+                            <div class="photo-upload-section" id="evitePhotoSection" style="display: none;">
+                                <label for="evitePhoto">Party Photo:</label>
+                                <input type="file" id="evitePhoto" class="info-input" accept="image/*" style="padding: 8px;">
+                            </div>
                         </div>
                     </div>
 
@@ -1276,6 +1438,15 @@
             <div class="toast-content">
                 <div><strong>Session:</strong> <span id="sessionIdToast">Loading...</span></div>
                 <div><strong>Time:</strong> <span id="sessionTimerToast">12:00:00</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="session-toast" id="sessionToast" onclick="toggleSessionToast()">
+            <div class="toast-icon">⏱️</div>
+            <div class="toast-content">
+                <div><strong>Session:</strong> <span id="sessionIdToast">Loading...</span></div>
+                <div><strong>Time:</strong> <span id="sessionTimerToast">12:00:00</span></div>
             </div>
         </div>
     </div>
@@ -1424,6 +1595,8 @@
             senderName: document.getElementById('senderName'),
             occasion: document.getElementById('occasion'),
             eventDate: document.getElementById('eventDate'),
+            evitePhoto: document.getElementById('evitePhoto'),
+            evitePhotoSection: document.getElementById('evitePhotoSection'),
             cardPreview: document.getElementById('cardPreview'),
             cardTitle: document.getElementById('cardTitle'),
             cardSubtitle: document.getElementById('cardSubtitle'),
@@ -1439,25 +1612,53 @@
             appTitle: document.getElementById('appTitle'),
             appDescription: document.getElementById('appDescription'),
             detailsTitle: document.getElementById('detailsTitle'),
-            templateTitle: document.getElementById('templateTitle')
+            templateTitle: document.getElementById('templateTitle'),
+            sideNav: document.getElementById('sideNav'),
+            mainContent: document.getElementById('mainContent')
         };
 
         let isToastCollapsed = false;
+        let isNavCollapsed = false;
+
+        function toggleNav() {
+            isNavCollapsed = !isNavCollapsed;
+            elements.sideNav.classList.toggle('collapsed', isNavCollapsed);
+            elements.mainContent.classList.toggle('expanded', isNavCollapsed);
+        }
 
         function toggleSessionToast() {
             isToastCollapsed = !isToastCollapsed;
             elements.sessionToast.classList.toggle('collapsed', isToastCollapsed);
         }
 
+        function updateNavActiveState() {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            if (currentMode) {
+                const activeLink = document.querySelector(`[data-mode="${currentMode}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            } else {
+                // Home is active
+                document.querySelector('.nav-link[onclick="showIntro()"]').classList.add('active');
+            }
+        }
+
         function showIntro() {
             elements.introPage.classList.remove('hidden');
             elements.appContent.classList.remove('active');
+            currentMode = null;
+            updateNavActiveState();
         }
 
         function startMode(mode) {
             elements.introPage.classList.add('hidden');
             elements.appContent.classList.add('active');
             switchMode(mode);
+            updateNavActiveState();
         }
 
         function switchMode(mode) {
@@ -1495,11 +1696,17 @@
                 elements.recipientName.placeholder = 'Guest\'s Name';
                 elements.senderName.placeholder = 'Host Name';
                 elements.occasion.placeholder = 'Event (e.g., Sarah\'s 30th Birthday Party)';
+                elements.evitePhotoSection.style.display = 'block';
                 elements.advancedRow.style.display = 'block';
                 elements.simpleCanvas.style.display = 'none';
                 elements.cardPreview.style.display = 'block';
                 elements.sharingSection.style.display = 'block';
                 updateCardPreview();
+            }
+
+            // Hide photo section for non-evite modes
+            if (mode !== 'evite') {
+                elements.evitePhotoSection.style.display = 'none';
             }
 
             saveSession();
@@ -1834,6 +2041,30 @@
             }
         }
 
+        function wrapText(context, text, x, y, maxWidth, lineHeight) {
+            const words = text.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                const word = words[i];
+                const width = context.measureText(currentLine + ' ' + word).width;
+                if (width < maxWidth) {
+                    currentLine += ' ' + word;
+                } else {
+                    lines.push(currentLine);
+                    currentLine = word;
+                }
+            }
+            lines.push(currentLine);
+
+            // Calculate starting Y position to center the text block
+            const totalHeight = lines.length * lineHeight;
+            const startY = y - (totalHeight / 2) + (lineHeight / 2);
+
+            return { lines, startY };
+        }
+
         function drawText(context, canvasEl) {
             const text = elements.wishText.value || 'Happy Birthday! 🎉';
             const fontSize = elements.fontSize.value;
@@ -1849,32 +2080,45 @@
 
             let x = canvasEl.width / 2;
             let y = canvasEl.height / 2;
+            let maxWidth = canvasEl.width * 0.8; // 80% of canvas width
+            const lineHeight = fontSize * 1.2;
 
             switch (position) {
                 case 'top':
-                    y = fontSize;
+                    y = fontSize * 2;
+                    context.textBaseline = 'top';
                     break;
                 case 'bottom':
-                    y = canvasEl.height - fontSize / 2;
+                    y = canvasEl.height - fontSize * 2;
+                    context.textBaseline = 'bottom';
                     break;
                 case 'left':
                     x = fontSize;
                     context.textAlign = 'left';
+                    maxWidth = canvasEl.width * 0.9;
                     break;
                 case 'right':
                     x = canvasEl.width - fontSize;
                     context.textAlign = 'right';
+                    maxWidth = canvasEl.width * 0.9;
                     break;
             }
 
-            if (strokeWidth > 0) {
-                context.strokeStyle = strokeColor;
-                context.lineWidth = strokeWidth;
-                context.strokeText(text, x, y);
-            }
+            const wrappedText = wrapText(context, text, x, y, maxWidth, lineHeight);
 
-            context.fillStyle = textColor;
-            context.fillText(text, x, y);
+            // Draw each line
+            wrappedText.lines.forEach((line, index) => {
+                const lineY = wrappedText.startY + (index * lineHeight);
+
+                if (strokeWidth > 0) {
+                    context.strokeStyle = strokeColor;
+                    context.lineWidth = strokeWidth;
+                    context.strokeText(line, x, lineY);
+                }
+
+                context.fillStyle = textColor;
+                context.fillText(line, x, lineY);
+            });
         }
 
         function createParticle(type) {
@@ -2094,6 +2338,23 @@
                     img.onload = () => {
                         backgroundImage = img;
                         updateCanvas();
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        elements.evitePhoto.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        backgroundImage = img;
+                        updateCanvas();
+                        saveSession();
                     };
                     img.src = event.target.result;
                 };
