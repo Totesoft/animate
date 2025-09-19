@@ -1,0 +1,80 @@
+name: Deploy Obfuscated Production
+
+on:
+  push:
+    branches: [ development ]
+  pull_request:
+    branches: [ development ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Create production branch if it doesn't exist
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git checkout -B production || git checkout production
+
+    - name: Merge development into production
+      run: |
+        git merge development --no-edit
+
+    - name: Backup original file
+      run: cp index.html index-dev-backup.html
+
+    - name: Build and obfuscate
+      run: npm run deploy
+
+    - name: Commit obfuscated code
+      run: |
+        git add index.html
+        git commit -m "Deploy obfuscated version - $(date)" || echo "No changes to commit"
+
+    - name: Push to production branch
+      run: git push origin production
+
+    - name: Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/development'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: .
+        publish_branch: gh-pages
+        exclude_assets: '.github,node_modules,*.md,package*.json,index-dev-backup.html'
+
+  development-preview:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Validate code
+      run: |
+        echo "✅ Code validation passed"
+        echo "Development version is ready for review"

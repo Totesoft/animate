@@ -1,0 +1,32 @@
+{
+  "name": "eventcraft-pro",
+  "version": "1.0.0",
+  "description": "Professional event invitation and greeting card design platform",
+  "main": "index.html",
+  "scripts": {
+    "dev": "echo 'Development server - open index.html in browser'",
+    "build": "npm run obfuscate",
+    "obfuscate": "javascript-obfuscator index.html --output index.html --compact true --control-flow-flattening true --dead-code-injection true --debug-protection true --disable-console-output true --identifier-names-generator 'hexadecimal' --log false --numbers-to-expressions true --rename-globals true --rotate-string-array true --self-defending true --shuffle-string-array true --split-strings true --string-array true --string-array-calls-transform true --string-array-encoding 'base64' --string-array-threshold 0.75 --transform-object-keys true --unicode-escape-sequence false",
+    "minify": "html-minifier --collapse-whitespace --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --minify-css true --minify-js true index.html -o index.html",
+    "deploy": "npm run build && npm run minify",
+    "backup-dev": "cp index.html index-dev-backup.html",
+    "restore-dev": "cp index-dev-backup.html index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/eventcraft-pro.git"
+  },
+  "keywords": [
+    "event",
+    "invitation",
+    "greeting-card",
+    "evite",
+    "rsvp"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "javascript-obfuscator": "^4.0.2",
+    "html-minifier": "^4.0.0"
+  }
+}
