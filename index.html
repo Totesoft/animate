@@ -1519,6 +1519,24 @@
                                 </div>
                             </div>
                             <div class="control-group">
+                                <h3>🎨 App Theme</h3>
+                                <div class="input-group">
+                                    <label for="simpleGradientTheme">Color Theme:</label>
+                                    <select id="simpleGradientTheme">
+                                        <option value="classic" selected>Classic Blue</option>
+                                        <option value="ocean-dark">Ocean Dark</option>
+                                        <option value="sunset-muted">Sunset Muted</option>
+                                        <option value="forest-deep">Forest Deep</option>
+                                        <option value="monochrome-light">Monochrome Light</option>
+                                        <option value="monochrome-dark">Monochrome Dark</option>
+                                        <option value="earth-tones">Earth Tones</option>
+                                        <option value="lavender-soft">Lavender Soft</option>
+                                        <option value="charcoal-blue">Charcoal Blue</option>
+                                        <option value="warm-gray">Warm Gray</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control-group">
                                 <h3>🎨 Text Style</h3>
                                 <div class="input-group">
                                     <label for="fontFamily">Font:</label>
@@ -1766,6 +1784,15 @@
                 document.documentElement.style.setProperty('--gradient-primary', colors.primary);
                 document.documentElement.style.setProperty('--gradient-secondary', colors.secondary);
 
+                // Force update all gradient elements that might not be using CSS variables
+                const gradientElements = document.querySelectorAll('.text-input-section, .side-nav, .intro-page, .card-header');
+                gradientElements.forEach(el => {
+                    if (el.style) {
+                        el.style.background = `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`;
+                    }
+                });
+
+                console.log('Applied theme:', theme, 'with colors:', colors);
                 updateCanvas();
                 saveSession();
             }
@@ -1886,6 +1913,7 @@
             textPosition: document.getElementById('textPosition'),
             backgroundType: document.getElementById('backgroundType'),
             gradientTheme: document.getElementById('gradientTheme'),
+            simpleGradientTheme: document.getElementById('simpleGradientTheme'),
             gradientColor1: document.getElementById('gradientColor1'),
             gradientColor2: document.getElementById('gradientColor2'),
             gradientDirection: document.getElementById('gradientDirection'),
@@ -2973,9 +3001,21 @@
             });
         });
 
-        // Special handler for gradient theme
+        // Special handlers for gradient themes
         elements.gradientTheme.addEventListener('change', (e) => {
             applyGradientTheme(e.target.value);
+            // Sync with simple theme selector
+            if (elements.simpleGradientTheme) {
+                elements.simpleGradientTheme.value = e.target.value;
+            }
+        });
+
+        elements.simpleGradientTheme.addEventListener('change', (e) => {
+            applyGradientTheme(e.target.value);
+            // Sync with advanced theme selector
+            if (elements.gradientTheme) {
+                elements.gradientTheme.value = e.target.value;
+            }
         });
 
         [elements.animation, elements.textColor, elements.strokeColor, elements.fontFamily,
@@ -3007,6 +3047,12 @@
         updateCharCount();
         updateCanvas();
         animate();
+
+        // Initialize gradient theme on page load
+        setTimeout(() => {
+            const currentTheme = elements.gradientTheme.value || 'classic';
+            applyGradientTheme(currentTheme);
+        }, 100);
 
         // Initialize RSVP and authentication
         handleRSVPFromURL();
