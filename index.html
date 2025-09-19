@@ -493,9 +493,33 @@
             margin-bottom: 30px;
         }
 
+        .intro-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .intro-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            transition: transform 0.4s ease;
+            background: rgba(255,255,255,0.1);
+            padding: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .intro-logo:hover {
+            transform: scale(1.05) rotate(2deg);
+        }
+
         .intro-page h1 {
             font-size: 3em;
-            margin-bottom: 20px;
+            margin: 0;
             text-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
 
@@ -552,9 +576,32 @@
             50% { background-position: -200% 0; }
         }
 
+        .mode-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .mode-card-logo {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.9);
+            padding: 6px;
+        }
+
+        .mode-card:hover .mode-card-logo {
+            transform: scale(1.1) rotate(-3deg);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+        }
+
         .mode-card-icon {
             font-size: 3em;
-            margin-bottom: 15px;
             display: block;
         }
 
@@ -714,6 +761,26 @@
             .nav-logo {
                 font-size: 1em;
                 gap: 8px;
+            }
+            .intro-logo {
+                width: 60px;
+                height: 60px;
+                padding: 6px;
+            }
+            .intro-header {
+                gap: 15px;
+                flex-direction: column;
+            }
+            .intro-page h1 {
+                font-size: 2.2em;
+            }
+            .mode-card-logo {
+                width: 40px;
+                height: 40px;
+                padding: 4px;
+            }
+            .mode-card-header {
+                gap: 12px;
             }
         }
 
@@ -1466,24 +1533,36 @@
         <div class="main-content" id="mainContent">
             <div class="container">
                 <div class="intro-page" id="introPage">
-                    <h1>🎯 EventCraft Pro</h1>
+                    <div class="intro-header">
+                        <img src="eventcraft.png" alt="EventCraft Pro" class="intro-logo">
+                        <h1>EventCraft Pro</h1>
+                    </div>
                     <p>Professional event invitation and greeting card design platform. Create stunning digital invitations, personalized greeting cards, and manage RSVPs with our comprehensive suite of tools.</p>
 
                     <div class="mode-cards">
                         <div class="mode-card" onclick="startMode('simple')">
-                            <span class="mode-card-icon">🎨</span>
+                            <div class="mode-card-header">
+                                <img src="eventcraft.png" alt="EventCraft Pro" class="mode-card-logo">
+                                <span class="mode-card-icon">🎨</span>
+                            </div>
                             <h3>Simple Wish Design</h3>
                             <p>Quick & beautiful birthday wishes with animations and effects. Perfect for social media, printing, or instant sharing!</p>
                         </div>
 
                         <div class="mode-card" onclick="startMode('greeting')">
-                            <span class="mode-card-icon">💌</span>
+                            <div class="mode-card-header">
+                                <img src="eventcraft.png" alt="EventCraft Pro" class="mode-card-logo">
+                                <span class="mode-card-icon">💌</span>
+                            </div>
                             <h3>E-Greeting Cards</h3>
                             <p>Professional greeting cards with personalized messages, templates, and full sharing capabilities across all platforms.</p>
                         </div>
 
                         <div class="mode-card" onclick="startMode('evite')">
-                            <span class="mode-card-icon">🎊</span>
+                            <div class="mode-card-header">
+                                <img src="eventcraft.png" alt="EventCraft Pro" class="mode-card-logo">
+                                <span class="mode-card-icon">🎊</span>
+                            </div>
                             <h3>Birthday E-vites</h3>
                             <p>Create and send beautiful digital party invitations with RSVP tracking, event details, and celebration themes.</p>
                         </div>
