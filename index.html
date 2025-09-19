@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Greeting Card Creator - Birthday Wishes</title>
+    <title>EventCraft Pro - Professional Event Invitations & Greeting Cards</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         * {
@@ -34,9 +34,15 @@
         }
 
         .header h1 {
-            color: #333;
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            text-shadow: 0 4px 8px rgba(102, 126, 234, 0.2);
         }
 
         .main-layout {
@@ -452,20 +458,40 @@
         }
 
         .mode-card {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            padding: 30px 20px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            padding: 35px 25px;
             cursor: pointer;
-            transition: all 0.3s;
-            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
         }
 
         .mode-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-8px) scale(1.02);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
             border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .mode-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+            background-size: 200% 100%;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 200% 0; }
+            50% { background-position: -200% 0; }
         }
 
         .mode-card-icon {
@@ -552,18 +578,23 @@
         }
 
         .login-btn {
-            background: rgba(255,255,255,0.1);
+            background: linear-gradient(45deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
             border: 1px solid rgba(255,255,255,0.3);
             color: white;
-            padding: 8px 12px;
-            border-radius: 20px;
+            padding: 10px 16px;
+            border-radius: 25px;
             cursor: pointer;
-            font-size: 12px;
-            transition: all 0.3s;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .login-btn:hover {
-            background: rgba(255,255,255,0.2);
+            background: linear-gradient(45deg, rgba(255,255,255,0.25), rgba(255,255,255,0.15));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
         }
 
         .user-info {
@@ -593,6 +624,11 @@
         .nav-logo {
             font-size: 1.5em;
             font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #fff, #f8f9fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .nav-toggle {
@@ -1234,7 +1270,7 @@
             <div class="nav-header">
                 <div class="nav-top">
                     <div class="nav-logo">
-                        <span class="nav-text">🎉 Creator</span>
+                        <span class="nav-text">🎯 EventCraft Pro</span>
                     </div>
                     <button class="nav-toggle" onclick="toggleNav()">
                         <span>◀</span>
@@ -1310,8 +1346,8 @@
         <div class="main-content" id="mainContent">
             <div class="container">
                 <div class="intro-page" id="introPage">
-                    <h1>🎉 Birthday Creator Studio 🎂</h1>
-                    <p>Welcome to the ultimate birthday celebration toolkit! Create stunning wishes, beautiful e-greeting cards, or design exciting party invitations - all in one place.</p>
+                    <h1>🎯 EventCraft Pro</h1>
+                    <p>Professional event invitation and greeting card design platform. Create stunning digital invitations, personalized greeting cards, and manage RSVPs with our comprehensive suite of tools.</p>
 
                     <div class="mode-cards">
                         <div class="mode-card" onclick="startMode('simple')">
@@ -2914,7 +2950,25 @@
         // Initialize RSVP and authentication
         handleRSVPFromURL();
 
-        // Google OAuth client ID is already set in HTML
+        // Initialize Google Sign-In
+        window.onload = function() {
+            if (typeof google !== 'undefined' && google.accounts) {
+                google.accounts.id.initialize({
+                    client_id: "132435517223-cgvv1befsebst3113v3nh9ie9hg9ur9u.apps.googleusercontent.com",
+                    callback: handleCredentialResponse
+                });
+                google.accounts.id.renderButton(
+                    document.querySelector('.g_id_signin'),
+                    {
+                        theme: "outline",
+                        size: "medium",
+                        text: "sign_in_with",
+                        shape: "rectangular",
+                        logo_alignment: "left"
+                    }
+                );
+            }
+        };
     </script>
 </body>
 </html>
