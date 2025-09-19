@@ -681,13 +681,40 @@
         }
 
         .nav-logo {
-            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.2em;
             font-weight: bold;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
             background: linear-gradient(45deg, #fff, #f8f9fa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+        }
+
+        .logo-image {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .logo-image:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .logo-image {
+                width: 32px;
+                height: 32px;
+            }
+            .nav-logo {
+                font-size: 1em;
+                gap: 8px;
+            }
         }
 
         .nav-toggle {
@@ -1362,7 +1389,8 @@
             <div class="nav-header">
                 <div class="nav-top">
                     <div class="nav-logo">
-                        <span class="nav-text">🎯 EventCraft Pro</span>
+                        <img src="eventcraft.png" alt="EventCraft Pro" class="logo-image">
+                        <span class="nav-text">EventCraft Pro</span>
                     </div>
                     <button class="nav-toggle" onclick="toggleNav()">
                         <span>◀</span>
