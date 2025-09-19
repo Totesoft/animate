@@ -2368,17 +2368,130 @@
                 return;
             }
 
-            const shareUrl = generateShareableLink();
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Birthday Party Invitation',
-                    text: `You're invited to ${elements.occasion.value || 'a birthday party'}!`,
-                    url: shareUrl
-                });
-            } else {
-                navigator.clipboard.writeText(shareUrl);
-                alert('Share link copied to clipboard!');
+            // Show sharing options modal
+            showEviteShareModal();
+        }
+
+        function showEviteShareModal() {
+            const modal = document.createElement('div');
+            modal.className = 'share-modal-overlay';
+            modal.innerHTML = `
+                <div class="share-modal">
+                    <div class="share-modal-header">
+                        <h3>📤 Share Your E-vite</h3>
+                        <button onclick="closeShareModal()" class="close-btn">✕</button>
+                    </div>
+                    <div class="share-modal-content">
+                        <p>Choose how you'd like to share your invitation:</p>
+                        <div class="share-options">
+                            <button onclick="shareEviteViaEmail()" class="share-option-btn email-btn">
+                                <div class="share-icon">📧</div>
+                                <div class="share-text">
+                                    <strong>Email Invitation</strong>
+                                    <small>Professional HTML email with envelope design</small>
+                                </div>
+                            </button>
+                            <button onclick="shareEviteViaCopy()" class="share-option-btn copy-btn">
+                                <div class="share-icon">🔗</div>
+                                <div class="share-text">
+                                    <strong>Copy Link</strong>
+                                    <small>Share the direct link to your invitation</small>
+                                </div>
+                            </button>
+                            <button onclick="shareEviteViaWhatsApp()" class="share-option-btn whatsapp-btn">
+                                <div class="share-icon">📱</div>
+                                <div class="share-text">
+                                    <strong>WhatsApp</strong>
+                                    <small>Send via WhatsApp message</small>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function closeShareModal() {
+            const modal = document.querySelector('.share-modal-overlay');
+            if (modal) {
+                modal.remove();
             }
+        }
+
+        function shareEviteViaEmail() {
+            const shareUrl = generateShareableLink();
+            const recipientName = elements.recipientName.value || 'Friend';
+            const senderName = elements.senderName.value || currentUser.name || 'Your Host';
+            const occasion = elements.occasion.value || 'Birthday Party';
+            const message = elements.wishText.value || 'Join us for a celebration!';
+
+            const subject = `🎉 You're Invited! ${occasion} 🎊`;
+
+            // Create beautiful HTML email body
+            const htmlBody = createEviteEmailTemplate({
+                recipientName,
+                senderName,
+                occasion,
+                message,
+                shareUrl
+            });
+
+            // For mailto (plain text fallback)
+            const plainTextBody = `
+🎉 You're Invited to ${occasion}! 🎊
+
+Dear ${recipientName},
+
+${senderName} has created a special invitation for you!
+
+${message}
+
+🎯 View Your Beautiful Invitation:
+${shareUrl}
+
+Click the link above to see your personalized e-vite and RSVP to the event.
+
+---
+Created with ❤️ using EventCraft Pro
+Professional Event Invitations & Greeting Cards
+            `.trim();
+
+            // Open mailto with fallback
+            window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(plainTextBody)}`);
+
+            // Also copy HTML to clipboard for those who want to paste into email clients
+            navigator.clipboard.writeText(htmlBody).then(() => {
+                alert('✅ Email opened and HTML template copied to clipboard!\n\nPro tip: Paste the HTML template into your email client for a beautiful envelope design!');
+            });
+
+            closeShareModal();
+        }
+
+        function shareEviteViaCopy() {
+            const shareUrl = generateShareableLink();
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                alert('✅ Invitation link copied to clipboard!');
+                closeShareModal();
+            });
+        }
+
+        function shareEviteViaWhatsApp() {
+            const shareUrl = generateShareableLink();
+            const recipientName = elements.recipientName.value || 'Friend';
+            const senderName = elements.senderName.value || 'Your Host';
+            const occasion = elements.occasion.value || 'Birthday Party';
+
+            const whatsappText = `🎉 *You're Invited!* 🎊
+
+${senderName} invites you to: *${occasion}*
+
+🎯 View your beautiful invitation: ${shareUrl}
+
+Created with EventCraft Pro ✨`;
+
+            window.open(`https://wa.me/?text=${encodeURIComponent(whatsappText)}`);
+            closeShareModal();
         }
 
         function generateShareableLink() {
