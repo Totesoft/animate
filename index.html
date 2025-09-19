@@ -7,8 +7,8 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         :root {
-            --gradient-primary: #667eea;
-            --gradient-secondary: #764ba2;
+            --gradient-primary: #2c3e50;
+            --gradient-secondary: #34495e;
         }
 
         * {
@@ -164,25 +164,25 @@
         }
 
         .greeting-info-section {
-            background: linear-gradient(135deg, #e17055, #f39c12);
-            padding: 25px;
-            border-radius: 20px;
+            background: linear-gradient(135deg, var(--gradient-primary), var(--gradient-secondary));
+            padding: 15px;
+            border-radius: 15px;
             color: white;
             margin-bottom: 20px;
-            box-shadow: 0 15px 35px rgba(225, 112, 85, 0.3);
+            box-shadow: 0 10px 25px rgba(225, 112, 85, 0.2);
         }
 
         .greeting-info-section h2 {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
-            font-size: 1.4em;
+            font-size: 1.2em;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
         .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 10px;
         }
 
         .info-input {
@@ -431,6 +431,17 @@
             grid-template-columns: 1fr 1fr;
             gap: 30px;
             align-items: start;
+        }
+
+        .evite-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .evite-layout .greeting-info-section {
+            margin-bottom: 0;
         }
 
         .intro-page {
@@ -1425,20 +1436,6 @@
 
             <div class="top-section" id="topSection">
                 <div class="top-row" id="advancedRow" style="display: none;">
-                    <div class="greeting-info-section">
-                        <h2 id="detailsTitle">📝 Greeting Card Details</h2>
-                        <div class="info-grid">
-                            <input type="text" id="recipientName" class="info-input" placeholder="Recipient's Name" maxlength="50">
-                            <input type="text" id="senderName" class="info-input" placeholder="Your Name" maxlength="50">
-                            <input type="text" id="occasion" class="info-input" placeholder="Occasion (e.g., 25th Birthday)" maxlength="50">
-                            <input type="date" id="eventDate" class="info-input">
-                            <div class="photo-upload-section" id="evitePhotoSection" style="display: none;">
-                                <label for="evitePhoto">Party Photo:</label>
-                                <input type="file" id="evitePhoto" class="info-input" accept="image/*" style="padding: 8px;">
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="greeting-templates">
                         <h3 style="margin-bottom: 10px; text-align: center;" id="templateTitle">🎨 Choose Template</h3>
                         <div class="template-grid" id="templateGrid">
@@ -1487,6 +1484,21 @@
                     </div>
                 </div>
 
+                <!-- Evite Form Section -->
+                <div class="greeting-info-section" id="compactEviteForm" style="display: none;">
+                    <h2 id="detailsTitle">📝 Event Details</h2>
+                    <div class="info-grid">
+                        <input type="text" id="recipientName" class="info-input" placeholder="Guest Name" maxlength="50">
+                        <input type="text" id="senderName" class="info-input" placeholder="Host Name" maxlength="50">
+                        <input type="text" id="occasion" class="info-input" placeholder="Event" maxlength="50">
+                        <input type="date" id="eventDate" class="info-input">
+                        <div class="photo-upload-section" id="evitePhotoSection" style="display: none; grid-column: 1 / -1;">
+                            <label for="evitePhoto">Party Photo:</label>
+                            <input type="file" id="evitePhoto" class="info-input" accept="image/*" style="padding: 8px;">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="tab-container">
                     <button class="tab active" onclick="switchTab('text')">📝 Animation</button>
                     <button class="tab" onclick="switchTab('media')">🖼️ Media</button>
@@ -1523,8 +1535,8 @@
                                 <div class="input-group">
                                     <label for="simpleGradientTheme">Color Theme:</label>
                                     <select id="simpleGradientTheme">
-                                        <option value="classic" selected>Classic Blue</option>
-                                        <option value="ocean-dark">Ocean Dark</option>
+                                        <option value="classic">Classic Blue</option>
+                                        <option value="ocean-dark" selected>Ocean Dark</option>
                                         <option value="sunset-muted">Sunset Muted</option>
                                         <option value="forest-deep">Forest Deep</option>
                                         <option value="monochrome-light">Monochrome Light</option>
@@ -1639,16 +1651,16 @@
                                         <option value="lavender-soft">Lavender Soft</option>
                                         <option value="charcoal-blue">Charcoal Blue</option>
                                         <option value="warm-gray">Warm Gray</option>
-                                        <option value="classic" selected>Classic (Default)</option>
+                                        <option value="ocean-dark" selected>Ocean Dark (Default)</option>
                                     </select>
                                 </div>
                                 <div class="input-group">
                                     <label for="gradientColor1">Color 1:</label>
-                                    <input type="color" id="gradientColor1" value="#667eea">
+                                    <input type="color" id="gradientColor1" value="#2c3e50">
                                 </div>
                                 <div class="input-group">
                                     <label for="gradientColor2">Color 2:</label>
-                                    <input type="color" id="gradientColor2" value="#764ba2">
+                                    <input type="color" id="gradientColor2" value="#34495e">
                                 </div>
                                 <div class="input-group">
                                     <label for="gradientDirection">Direction:</label>
@@ -1943,6 +1955,7 @@
             shareableLink: document.getElementById('shareableLink'),
             templateGrid: document.getElementById('templateGrid'),
             advancedRow: document.getElementById('advancedRow'),
+            compactEviteForm: document.getElementById('compactEviteForm'),
             introPage: document.getElementById('introPage'),
             appContent: document.getElementById('appContent'),
             appTitle: document.getElementById('appTitle'),
@@ -2011,6 +2024,7 @@
                 elements.appTitle.textContent = '🎨 Simple Birthday Wishes';
                 elements.appDescription.textContent = 'Create quick, beautiful birthday wishes with animations and effects!';
                 elements.advancedRow.style.display = 'none';
+                elements.compactEviteForm.style.display = 'none';
                 elements.simpleCanvas.style.display = 'block';
                 elements.cardPreview.style.display = 'none';
                 elements.sharingSection.style.display = 'none';
@@ -2020,6 +2034,7 @@
                 elements.detailsTitle.textContent = '📝 Greeting Card Details';
                 elements.templateTitle.textContent = '🎨 Choose Greeting Template';
                 elements.advancedRow.style.display = 'block';
+                elements.compactEviteForm.style.display = 'none';
                 elements.simpleCanvas.style.display = 'none';
                 elements.cardPreview.style.display = 'block';
                 elements.sharingSection.style.display = 'block';
@@ -2027,13 +2042,14 @@
             } else if (mode === 'evite') {
                 elements.appTitle.textContent = '🎊 Birthday E-vites';
                 elements.appDescription.textContent = 'Create stunning digital party invitations with RSVP and event details!';
-                elements.detailsTitle.textContent = '🎉 Party Invitation Details';
+                elements.detailsTitle.textContent = '🎉 Event Details';
                 elements.templateTitle.textContent = '🎪 Choose Invitation Template';
-                elements.recipientName.placeholder = 'Guest\'s Name';
+                elements.recipientName.placeholder = 'Guest Name';
                 elements.senderName.placeholder = 'Host Name';
                 elements.occasion.placeholder = 'Event (e.g., Sarah\'s 30th Birthday Party)';
                 elements.evitePhotoSection.style.display = 'block';
                 elements.advancedRow.style.display = 'block';
+                elements.compactEviteForm.style.display = 'block';
                 elements.simpleCanvas.style.display = 'none';
                 elements.cardPreview.style.display = 'block';
                 elements.sharingSection.style.display = 'block';
@@ -2440,9 +2456,9 @@
                     fontFamily: 'Arial, sans-serif',
                     textPosition: 'center',
                     backgroundType: 'gradient',
-                    gradientTheme: 'classic',
-                    gradientColor1: '#667eea',
-                    gradientColor2: '#764ba2',
+                    gradientTheme: 'ocean-dark',
+                    gradientColor1: '#2c3e50',
+                    gradientColor2: '#34495e',
                     gradientDirection: 'linear-gradient(135deg,',
                     climateEffect: 'none',
                     particleIntensity: 5,
@@ -2485,9 +2501,9 @@
             elements.fontFamily.value = data.fontFamily || 'Arial, sans-serif';
             elements.textPosition.value = data.textPosition || 'center';
             elements.backgroundType.value = data.backgroundType || 'gradient';
-            elements.gradientTheme.value = data.gradientTheme || 'classic';
-            elements.gradientColor1.value = data.gradientColor1 || '#667eea';
-            elements.gradientColor2.value = data.gradientColor2 || '#764ba2';
+            elements.gradientTheme.value = data.gradientTheme || 'ocean-dark';
+            elements.gradientColor1.value = data.gradientColor1 || '#2c3e50';
+            elements.gradientColor2.value = data.gradientColor2 || '#34495e';
             elements.gradientDirection.value = data.gradientDirection || 'linear-gradient(135deg,';
             elements.climateEffect.value = data.climateEffect || 'none';
             elements.particleIntensity.value = data.particleIntensity || 5;
@@ -2925,9 +2941,9 @@
             elements.fontFamily.value = 'Arial, sans-serif';
             elements.textPosition.value = 'center';
             elements.backgroundType.value = 'gradient';
-            elements.gradientTheme.value = 'classic';
-            elements.gradientColor1.value = '#667eea';
-            elements.gradientColor2.value = '#764ba2';
+            elements.gradientTheme.value = 'ocean-dark';
+            elements.gradientColor1.value = '#2c3e50';
+            elements.gradientColor2.value = '#34495e';
             elements.gradientDirection.value = 'linear-gradient(135deg,';
             elements.climateEffect.value = 'none';
             elements.particleIntensity.value = 5;
@@ -3050,7 +3066,7 @@
 
         // Initialize gradient theme on page load
         setTimeout(() => {
-            const currentTheme = elements.gradientTheme.value || 'classic';
+            const currentTheme = elements.gradientTheme.value || 'ocean-dark';
             applyGradientTheme(currentTheme);
         }, 100);
 
