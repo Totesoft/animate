@@ -6,6 +6,11 @@
     <title>EventCraft Pro - Professional Event Invitations & Greeting Cards</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
+        :root {
+            --gradient-primary: #667eea;
+            --gradient-secondary: #764ba2;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,7 +19,7 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--gradient-primary) 0%, var(--gradient-secondary) 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -34,7 +39,7 @@
         }
 
         .header h1 {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--gradient-primary) 0%, var(--gradient-secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -59,7 +64,7 @@
         }
 
         .text-input-section {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, var(--gradient-primary), var(--gradient-secondary));
             padding: 30px;
             border-radius: 20px;
             color: white;
@@ -247,7 +252,7 @@
         }
 
         .card-header {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, var(--gradient-primary), var(--gradient-secondary));
             color: white;
             padding: 20px;
             text-align: center;
@@ -431,7 +436,7 @@
         .intro-page {
             text-align: center;
             padding: 60px 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--gradient-primary) 0%, var(--gradient-secondary) 100%);
             border-radius: 20px;
             color: white;
             margin-bottom: 30px;
@@ -484,7 +489,7 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+            background: linear-gradient(90deg, var(--gradient-primary), var(--gradient-secondary), var(--gradient-primary));
             background-size: 200% 100%;
             animation: shimmer 3s ease-in-out infinite;
         }
@@ -1604,6 +1609,22 @@
                                     </select>
                                 </div>
                                 <div class="input-group">
+                                    <label for="gradientTheme">Gradient Theme:</label>
+                                    <select id="gradientTheme">
+                                        <option value="custom">Custom Colors</option>
+                                        <option value="ocean-dark">Ocean Dark</option>
+                                        <option value="sunset-muted">Sunset Muted</option>
+                                        <option value="forest-deep">Forest Deep</option>
+                                        <option value="monochrome-light">Monochrome Light</option>
+                                        <option value="monochrome-dark">Monochrome Dark</option>
+                                        <option value="earth-tones">Earth Tones</option>
+                                        <option value="lavender-soft">Lavender Soft</option>
+                                        <option value="charcoal-blue">Charcoal Blue</option>
+                                        <option value="warm-gray">Warm Gray</option>
+                                        <option value="classic" selected>Classic (Default)</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
                                     <label for="gradientColor1">Color 1:</label>
                                     <input type="color" id="gradientColor1" value="#667eea">
                                 </div>
@@ -1720,6 +1741,36 @@
         let animationId = null;
         let particles = [];
 
+        const gradientThemes = {
+            'classic': { primary: '#667eea', secondary: '#764ba2' },
+            'ocean-dark': { primary: '#2c3e50', secondary: '#34495e' },
+            'sunset-muted': { primary: '#8b5a3c', secondary: '#a0593c' },
+            'forest-deep': { primary: '#27ae60', secondary: '#2c3e50' },
+            'monochrome-light': { primary: '#bdc3c7', secondary: '#ecf0f1' },
+            'monochrome-dark': { primary: '#2c3e50', secondary: '#34495e' },
+            'earth-tones': { primary: '#8b4513', secondary: '#a0522d' },
+            'lavender-soft': { primary: '#9b59b6', secondary: '#b19cd9' },
+            'charcoal-blue': { primary: '#34495e', secondary: '#3498db' },
+            'warm-gray': { primary: '#7f8c8d', secondary: '#95a5a6' }
+        };
+
+        function applyGradientTheme(theme) {
+            if (theme === 'custom') return;
+
+            const colors = gradientThemes[theme];
+            if (colors) {
+                elements.gradientColor1.value = colors.primary;
+                elements.gradientColor2.value = colors.secondary;
+
+                // Update CSS custom properties
+                document.documentElement.style.setProperty('--gradient-primary', colors.primary);
+                document.documentElement.style.setProperty('--gradient-secondary', colors.secondary);
+
+                updateCanvas();
+                saveSession();
+            }
+        }
+
         const templates = {
             greeting: {
                 classic: {
@@ -1834,6 +1885,7 @@
             photoOpacityValue: document.getElementById('photoOpacityValue'),
             textPosition: document.getElementById('textPosition'),
             backgroundType: document.getElementById('backgroundType'),
+            gradientTheme: document.getElementById('gradientTheme'),
             gradientColor1: document.getElementById('gradientColor1'),
             gradientColor2: document.getElementById('gradientColor2'),
             gradientDirection: document.getElementById('gradientDirection'),
@@ -2360,6 +2412,7 @@
                     fontFamily: 'Arial, sans-serif',
                     textPosition: 'center',
                     backgroundType: 'gradient',
+                    gradientTheme: 'classic',
                     gradientColor1: '#667eea',
                     gradientColor2: '#764ba2',
                     gradientDirection: 'linear-gradient(135deg,',
@@ -2382,6 +2435,7 @@
                 fontFamily: elements.fontFamily.value,
                 textPosition: elements.textPosition.value,
                 backgroundType: elements.backgroundType.value,
+                gradientTheme: elements.gradientTheme.value,
                 gradientColor1: elements.gradientColor1.value,
                 gradientColor2: elements.gradientColor2.value,
                 gradientDirection: elements.gradientDirection.value,
@@ -2403,6 +2457,7 @@
             elements.fontFamily.value = data.fontFamily || 'Arial, sans-serif';
             elements.textPosition.value = data.textPosition || 'center';
             elements.backgroundType.value = data.backgroundType || 'gradient';
+            elements.gradientTheme.value = data.gradientTheme || 'classic';
             elements.gradientColor1.value = data.gradientColor1 || '#667eea';
             elements.gradientColor2.value = data.gradientColor2 || '#764ba2';
             elements.gradientDirection.value = data.gradientDirection || 'linear-gradient(135deg,';
@@ -2842,6 +2897,7 @@
             elements.fontFamily.value = 'Arial, sans-serif';
             elements.textPosition.value = 'center';
             elements.backgroundType.value = 'gradient';
+            elements.gradientTheme.value = 'classic';
             elements.gradientColor1.value = '#667eea';
             elements.gradientColor2.value = '#764ba2';
             elements.gradientDirection.value = 'linear-gradient(135deg,';
@@ -2915,6 +2971,11 @@
                 updateCanvas();
                 saveSession();
             });
+        });
+
+        // Special handler for gradient theme
+        elements.gradientTheme.addEventListener('change', (e) => {
+            applyGradientTheme(e.target.value);
         });
 
         [elements.animation, elements.textColor, elements.strokeColor, elements.fontFamily,
