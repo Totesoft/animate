@@ -1392,6 +1392,179 @@
             color: #666;
         }
 
+        /* Share Modal Styles */
+        .share-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+        }
+
+        .share-modal {
+            background: white;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .share-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 30px;
+            background: linear-gradient(135deg, var(--gradient-primary), var(--gradient-secondary));
+            color: white;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .share-modal-header h3 {
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+
+        .share-modal-content {
+            padding: 30px;
+        }
+
+        .share-modal-content p {
+            margin-bottom: 25px;
+            color: var(--text-secondary);
+            font-size: 1.1em;
+        }
+
+        .share-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .share-option-btn {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,249,250,0.9));
+            border: 2px solid var(--border-light);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .share-option-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: var(--accent-primary);
+        }
+
+        .share-option-btn.email-btn:hover {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(41, 128, 185, 0.05));
+        }
+
+        .share-option-btn.copy-btn:hover {
+            background: linear-gradient(135deg, rgba(52, 73, 94, 0.1), rgba(44, 62, 80, 0.05));
+        }
+
+        .share-option-btn.whatsapp-btn:hover {
+            background: linear-gradient(135deg, rgba(37, 211, 102, 0.1), rgba(34, 197, 94, 0.05));
+        }
+
+        .share-icon {
+            font-size: 2.5em;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.8);
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .share-text {
+            flex: 1;
+        }
+
+        .share-text strong {
+            display: block;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+
+        .share-text small {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .share-modal {
+                margin: 20px;
+                width: calc(100% - 40px);
+            }
+
+            .share-modal-content {
+                padding: 20px;
+            }
+
+            .share-option-btn {
+                padding: 15px;
+                gap: 15px;
+            }
+
+            .share-icon {
+                font-size: 2em;
+                width: 50px;
+                height: 50px;
+            }
+        }
+
         .evite-stats {
             display: flex;
             gap: 15px;
@@ -2492,6 +2665,206 @@ Created with EventCraft Pro ✨`;
 
             window.open(`https://wa.me/?text=${encodeURIComponent(whatsappText)}`);
             closeShareModal();
+        }
+
+        function createEviteEmailTemplate({ recipientName, senderName, occasion, message, shareUrl }) {
+            return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You're Invited! ${occasion}</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .envelope-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            color: white;
+        }
+        .envelope-flap {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 40px solid #5a67d8;
+        }
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .email-logo {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            backdrop-filter: blur(10px);
+        }
+        .invitation-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .invitation-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin: 10px 0 0 0;
+        }
+        .invitation-content {
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .greeting {
+            font-size: 24px;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .host-info {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #667eea;
+        }
+        .event-details {
+            font-size: 18px;
+            margin: 15px 0;
+            color: #495057;
+        }
+        .personal-message {
+            font-style: italic;
+            color: #6c757d;
+            margin: 20px 0;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .cta-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            text-align: center;
+        }
+        .view-invitation-btn {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.3);
+            transition: transform 0.3s ease;
+        }
+        .view-invitation-btn:hover {
+            transform: translateY(-2px);
+        }
+        .cta-text {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 25px;
+            text-align: center;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        .footer-logo {
+            margin-bottom: 10px;
+        }
+        .social-icons {
+            margin: 15px 0;
+        }
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="envelope-header">
+            <div class="envelope-flap"></div>
+            <div class="logo-section">
+                <div class="email-logo">🎯</div>
+                <div>
+                    <h1 class="invitation-title">You're Invited!</h1>
+                    <p class="invitation-subtitle">EventCraft Pro Invitation</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="invitation-content">
+            <div class="greeting">Dear ${recipientName},</div>
+
+            <div class="host-info">
+                <div class="event-details"><strong>🎊 ${occasion} 🎉</strong></div>
+                <div style="margin-top: 10px;">Hosted by: <strong>${senderName}</strong></div>
+            </div>
+
+            <div class="personal-message">"${message}"</div>
+
+            <div class="divider"></div>
+
+            <div class="cta-section">
+                <div class="cta-text">🎨 Click below to view your beautiful, personalized invitation and RSVP!</div>
+                <a href="${shareUrl}" class="view-invitation-btn">
+                    ✨ View My Invitation ✨
+                </a>
+            </div>
+
+            <p style="margin-top: 30px; color: #6c757d; font-size: 14px;">
+                This invitation was created with love using EventCraft Pro -
+                Professional Event Invitations & Greeting Cards
+            </p>
+        </div>
+
+        <div class="footer">
+            <div class="footer-logo">
+                <strong>🎯 EventCraft Pro</strong>
+            </div>
+            <p>Professional Event Invitations & Greeting Cards</p>
+            <p style="font-size: 12px; margin-top: 15px;">
+                Create your own beautiful invitations at EventCraft Pro
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+            `.trim();
         }
 
         function generateShareableLink() {
